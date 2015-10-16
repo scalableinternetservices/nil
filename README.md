@@ -14,10 +14,11 @@ Team Members:
 
 Qing Ren
 
+![eonian](https://qren.me/static/images/cs219/yingze.jpg)
+
 ![renqing](https://qren.me/static/images/qing.jpg)
 
 ![hanci-lyu](https://qren.me/static/images/cs219/hanci.jpeg)
 
 ![YutongZhang](https://qren.me/static/images/cs219/yutong.jpeg)
 
-![eonian](https://qren.me/static/images/cs219/yingze.jpg)
