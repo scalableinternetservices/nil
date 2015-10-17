@@ -14,7 +14,7 @@ Team Members:
 
 Qing Ren
 
-![eonian](https://qren.me/static/images/cs219/yingze.jpg)
+![eonian](https://qren.me/static/images/cs219/yingze.jpg =250x)
 
 ![renqing](https://qren.me/static/images/qing.jpg)
 
