@@ -16,11 +16,11 @@ Qing Ren
 <!--![eonian](https://qren.me/static/images/cs219/yingze.jpg )-->
 ![renqing](https://qren.me/static/images/qing.jpg)
 
-Hanci Lyu
+Hanci Lyu <br>
 ![hanci-lyu](https://qren.me/static/images/cs219/hanci.jpeg)
 
-Yutong Zhang
+Yutong Zhang <br>
 ![YutongZhang](https://qren.me/static/images/cs219/yutong.jpeg)
 
-Yingze Qu
+Yingze Qu <br>
 <a href="url"><img src="https://qren.me/static/images/cs219/yingze.jpg" align="left" height="250"></a>
