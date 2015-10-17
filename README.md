@@ -13,12 +13,14 @@ Link to Pivotal Tracker:    https://www.pivotaltracker.com/projects/1446778
 Team Members: 
 
 Qing Ren
-
-![eonian](https://qren.me/static/images/cs219/yingze.jpg =250x)
-
+<!--![eonian](https://qren.me/static/images/cs219/yingze.jpg )-->
 ![renqing](https://qren.me/static/images/qing.jpg)
 
+Hanci Lyu
 ![hanci-lyu](https://qren.me/static/images/cs219/hanci.jpeg)
 
+Yutong Zhang
 ![YutongZhang](https://qren.me/static/images/cs219/yutong.jpeg)
 
+Yingze Qu
+<a href="url"><img src="https://qren.me/static/images/cs219/yingze.jpg" align="left" height="250"></a>
