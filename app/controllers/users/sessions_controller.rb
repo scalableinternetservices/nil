@@ -1,5 +1,10 @@
 class Users::SessionsController < Devise::SessionsController
 # before_filter :configure_sign_in_params, only: [:create]
+  layout :resolve_layout
+
+  def index
+    render 'layouts/application'
+  end
 
   # GET /resource/sign_in
   # def new
@@ -16,7 +21,15 @@ class Users::SessionsController < Devise::SessionsController
   #   super
   # end
 
-  # protected
+  protected
+    def resolve_layout
+      case action_name
+        when ''
+          'application'
+        else
+          false
+      end
+    end
 
   # If you have extra params to permit, append them to the sanitizer.
   # def configure_sign_in_params
