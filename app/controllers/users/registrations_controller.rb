@@ -41,10 +41,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
     def resolve_layout
       case action_name
-        when 'edit'
-          'application'
-        else
+        when 'new'
           false
+        else
+          'application'
       end
     end
   # If you have extra params to permit, append them to the sanitizer.
