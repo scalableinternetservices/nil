@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
-	get "users/login" => "users#login"
+	get "users/login"             => "users#login"
+  get "users/logout"            => "users#logout"
+  get "users/register"          => "users#register"
+  get "users/setting"           => "users#setting"
+  get "users/setting_customer"  => "users#setting_customer"
+  get "users/setting_rest"      => "users#setting_rest"
+  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
