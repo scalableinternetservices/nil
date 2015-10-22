@@ -1,0 +1,4 @@
+Username: <%=@user.username%>
+E-mail: <%= @user.email %>
+Role: <%= @user.role%>
+
