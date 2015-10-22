@@ -10,12 +10,15 @@ class UserCustomersController < ApplicationController
   # GET /user_customers/1
   # GET /user_customers/1.json
   def show
-		@user = UserCustomer.find(params[:user_id])
+		@user_customer = UserCustomer.find(params[:id])
+		@user = User.find(@user_customer.user_id)
   end
 
   # GET /user_customers/new
   def new
     @user_customer = UserCustomer.new
+		@user_customer.user_id = 5
+		@user_customer.save!
   end
 
   # GET /user_customers/1/edit
