@@ -10,12 +10,15 @@ class UserCustomersController < ApplicationController
   # GET /user_customers/1
   # GET /user_customers/1.json
   def show
-		@user = UserCustomer.find(params[:user_id])
+		@user_customer = UserCustomer.find(params[:id])
+		@user = User.find(@user_customer.user_id)
   end
 
   # GET /user_customers/new
   def new
     @user_customer = UserCustomer.new
+		@user_customer.user_id = 5
+		@user_customer.save!
   end
 
   # GET /user_customers/1/edit
@@ -41,6 +44,7 @@ class UserCustomersController < ApplicationController
   # PATCH/PUT /user_customers/1
   # PATCH/PUT /user_customers/1.json
   def update
+		@user = User.find(@user_customer.user_id)
     respond_to do |format|
       if @user_customer.update(user_customer_params)
         format.html { redirect_to @user_customer, notice: 'User customer was successfully updated.' }
@@ -65,7 +69,7 @@ class UserCustomersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user_customer
-      @user_customer = UserCustomer.find(params[:user_id])
+      @user_customer = UserCustomer.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
