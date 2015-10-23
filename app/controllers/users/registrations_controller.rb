@@ -11,7 +11,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # POST /resource
   def create
     super
-    UserCustomer.create!(user_id: current_user.id)
+    Customer.create!(user_id: current_user.id)
   end
 
   # GET /resource/edit

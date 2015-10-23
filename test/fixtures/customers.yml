@@ -3,11 +3,13 @@
 one:
   name: MyString
   address: MyText
-  zipcode: 
-  phone: 
+  zip: MyString
+  phone: MyString
+  user_id: 
 
 two:
   name: MyString
   address: MyText
-  zipcode: 
-  phone: 
+  zip: MyString
+  phone: MyString
+  user_id: 

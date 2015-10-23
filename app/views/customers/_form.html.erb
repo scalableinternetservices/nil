@@ -1,15 +1,16 @@
-<%= form_for(@user_customer) do |f| %>
-  <% if @user_customer.errors.any? %>
+<%= form_for(@customer) do |f| %>
+  <% if @customer.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@user_customer.errors.count, "error") %> prohibited this user_customer from being saved:</h2>
+      <h2><%= pluralize(@customer.errors.count, "error") %> prohibited this customer from being saved:</h2>
 
       <ul>
-      <% @user_customer.errors.full_messages.each do |message| %>
+      <% @customer.errors.full_messages.each do |message| %>
         <li><%= message %></li>
       <% end %>
       </ul>
     </div>
   <% end %>
+
   <div class="field">
     <%= f.label :name %><br>
     <%= f.text_field :name %>
@@ -19,12 +20,16 @@
     <%= f.text_area :address %>
   </div>
   <div class="field">
-    <%= f.label :zipcode %><br>
-    <%= f.text_field :zipcode %>
+    <%= f.label :zip %><br>
+    <%= f.text_field :zip %>
   </div>
   <div class="field">
     <%= f.label :phone %><br>
     <%= f.text_field :phone %>
+  </div>
+  <div class="field">
+    <%= f.label :user_id %><br>
+    <%= f.text_field :user_id %>
   </div>
   <div class="actions">
     <%= f.submit %>

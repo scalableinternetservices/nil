@@ -11,31 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151022232516) do
+ActiveRecord::Schema.define(version: 20151023031655) do
 
-  create_table "user_customers", force: :cascade do |t|
+  create_table "customers", force: :cascade do |t|
     t.string   "name",       limit: 255
     t.text     "address",    limit: 65535
-    t.integer  "zipcode",    limit: 4
-    t.integer  "phone",      limit: 4
+    t.string   "zip",        limit: 255
+    t.string   "phone",      limit: 255
+    t.integer  "user_id",    limit: 4
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
-    t.integer  "user_id",    limit: 4
   end
 
-  add_index "user_customers", ["user_id"], name: "index_user_customers_on_user_id", using: :btree
-
-  create_table "user_customers", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.text     "address",    limit: 65535
-    t.integer  "zipcode",    limit: 4
-    t.integer  "phone",      limit: 4
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
-    t.integer  "user_id",    limit: 4
-  end
-
-  add_index "user_customers", ["user_id"], name: "index_user_customers_on_user_id", using: :btree
+  add_index "customers", ["user_id"], name: "index_customers_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  limit: 255, default: "", null: false
@@ -56,5 +44,5 @@ ActiveRecord::Schema.define(version: 20151022232516) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
-  add_foreign_key "user_customers", "users"
+  add_foreign_key "customers", "users"
 end
