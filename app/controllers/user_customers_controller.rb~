@@ -44,7 +44,6 @@ class UserCustomersController < ApplicationController
   # PATCH/PUT /user_customers/1
   # PATCH/PUT /user_customers/1.json
   def update
-		@user = User.find(@user_customer.user_id)
     respond_to do |format|
       if @user_customer.update(user_customer_params)
         format.html { redirect_to @user_customer, notice: 'User customer was successfully updated.' }

@@ -17,7 +17,7 @@ class UserCustomersController < ApplicationController
   # GET /user_customers/new
   def new
     @user_customer = UserCustomer.new
-		@user_customer.user_id = 5
+		@user_customer.user_id = 1
 		@user_customer.save!
   end
 

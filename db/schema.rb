@@ -11,17 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151022191516) do
-
-  create_table "user", primary_key: "user_id", force: :cascade do |t|
-    t.string   "username",    limit: 50,  null: false
-    t.string   "password",    limit: 32,  null: false
-    t.string   "email",       limit: 100, null: false
-    t.integer  "role",        limit: 4,   null: false
-    t.datetime "time_create",             null: false
-  end
-
-  add_index "user", ["username", "email"], name: "username", unique: true, using: :btree
+ActiveRecord::Schema.define(version: 20151022232516) do
 
   create_table "user_customers", force: :cascade do |t|
     t.string   "name",       limit: 255
