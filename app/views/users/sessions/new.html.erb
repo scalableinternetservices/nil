@@ -70,7 +70,12 @@
 
 
           <%= form_for(resource, as: resource_name, url: session_path(resource_name), role: 'form') do |f| %>
-            <fieldset>
+              <div id="error_explanation">
+                <% flash.each do |name, msg| %>
+                    <ul><%="#{msg}" if msg.is_a?(String)%></ul>
+                <% end %>
+              </div>
+              <fieldset>
               <h4>Welcome to Hungryman</h4><br/>
               <div class="form-group">
                 <%= f.label :email %><br />
