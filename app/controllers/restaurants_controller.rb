@@ -1,4 +1,5 @@
 class RestaurantsController < ApplicationController
+  before_action :check_access
   before_action :set_restaurant, only: [:show, :edit, :update, :destroy]
 
   # GET /restaurants
@@ -70,5 +71,12 @@ class RestaurantsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def restaurant_params
       params.require(:restaurant).permit(:name, :address, :zip, :phone, :user_id)
+    end
+
+  private
+    def check_access
+      if current_user.role != "restaurant"
+        render html: "Access denied.".html_safe and return
+      end
     end
 end

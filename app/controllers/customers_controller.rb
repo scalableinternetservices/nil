@@ -1,4 +1,5 @@
 class CustomersController < ApplicationController
+  before_action :check_access
   before_action :set_customer, only: [:show, :edit, :update, :destroy]
 
   # GET /customers
@@ -72,4 +73,12 @@ class CustomersController < ApplicationController
     def customer_params
       params.require(:customer).permit(:name, :address, :zip, :phone, :user_id)
     end
+
+  private
+    def check_access
+      if current_user.role != "customer"
+        render html: "Access denied.".html_safe and return
+      end
+    end
+
 end
