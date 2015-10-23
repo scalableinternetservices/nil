@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :restaurants
   get 'customers/setting' => 'customers#edit'
   resources :customers
   devise_for :users, controllers: {registrations: "users/registrations", sessions: "users/sessions"}
