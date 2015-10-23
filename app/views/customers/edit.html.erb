@@ -29,6 +29,12 @@
                             <!-- Tab panes -->
                             <div class="tab-content">
                                 <div class="tab-pane fade in active" id="home-pills">
+                                    <% if params[:feedback] == 'succ' %>
+                                    <div class="alert alert-success">
+                                        <li>Update successfully</li>
+                                    </div>
+                                    <% end %>
+
                                   <%= form_for(@customer) do |f| %>
                                     <% if @customer.errors.any? %>
                                       <div class="alert alert-danger">

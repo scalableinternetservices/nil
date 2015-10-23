@@ -20,12 +20,12 @@
             <li class="active">
               <a href="/users/edit" >Basic</a>
             </li>
-          <% if current_user.role == "customer" %>
+          <% if current_user.role.downcase == "customer" %>
             <li>
               <a href="/customers/setting">Customer</a>
             </li>
           <% end %>
-          <% if current_user.role == "restaurant" %>
+          <% if current_user.role.downcase == "restaurant" %>
             <li>
               <a href="/restaurants/setting">Restaurant</a>
             </li>

@@ -75,7 +75,7 @@ class RestaurantsController < ApplicationController
 
   private
     def check_access
-      if current_user.role != "restaurant"
+      if current_user.role.downcase != "restaurant"
         render html: "Access denied.".html_safe and return
       end
     end

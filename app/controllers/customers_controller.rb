@@ -43,7 +43,8 @@ class CustomersController < ApplicationController
   def update
     respond_to do |format|
       if @customer.update(customer_params)
-        format.html { redirect_to @customer, notice: 'Customer was successfully updated.' }
+        @status = 'succ'
+        format.html { redirect_to '/customers/setting?feedback=succ' }
         format.json { render :show, status: :ok, location: @customer }
       else
         format.html { render :edit }
@@ -76,7 +77,7 @@ class CustomersController < ApplicationController
 
   private
     def check_access
-      if current_user.role != "customer"
+      if current_user.role.downcase != "customer"
         render html: "Access denied.".html_safe and return
       end
     end
