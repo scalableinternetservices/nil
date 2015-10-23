@@ -17,7 +17,11 @@ class UserCustomersController < ApplicationController
   # GET /user_customers/new
   def new
     @user_customer = UserCustomer.new
+<<<<<<< HEAD
+		@user_customer.user_id = 1
+=======
 		@user_customer.user_id = 5
+>>>>>>> daa1946f267e1ae00dd4dae6fdb16e2d3247495e
 		@user_customer.save!
   end
 

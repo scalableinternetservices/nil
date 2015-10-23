@@ -25,6 +25,18 @@ ActiveRecord::Schema.define(version: 20151022232516) do
 
   add_index "user_customers", ["user_id"], name: "index_user_customers_on_user_id", using: :btree
 
+  create_table "user_customers", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.text     "address",    limit: 65535
+    t.integer  "zipcode",    limit: 4
+    t.integer  "phone",      limit: 4
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.integer  "user_id",    limit: 4
+  end
+
+  add_index "user_customers", ["user_id"], name: "index_user_customers_on_user_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                  limit: 255, default: "", null: false
     t.string   "encrypted_password",     limit: 255, default: "", null: false
