@@ -11,7 +11,17 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # POST /resource
   def create
     super
-    Customer.create(user_id: current_user.id) if current_user
+    @user = current_user
+    if @user
+      case @user.role
+        when 'customer'
+          Customer.create(user_id: current_user.id)
+        when 'restaurant'
+          Restaurant.create(user_id: current_user.id)
+        else
+          
+      end
+    end
   end
 
   # GET /resource/edit
