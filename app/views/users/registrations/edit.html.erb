@@ -18,15 +18,16 @@
           <!-- Nav tabs -->
           <ul class="nav nav-pills">
             <li class="active">
-              <a href="/users/setting" >Basic</a>
+              <a href="/users/edit" >Basic</a>
             </li>
             <li>
-              <a href="/users/setting_customer">Customer</a>
+              <a href="/customers/setting">Customer</a>
             </li>
             <li>
               <a href="/users/setting_rest">Restaurant</a>
             </li>
           </ul>
+          <br/>
 
           <!-- Tab panes -->
           <div class="tab-content">
@@ -60,7 +61,7 @@
                   <%= devise_error_messages! %>
 
                   <div class="form-group">
-                    <%= f.label :email %><br />
+                    <%= f.label :email %>
                     <%= f.email_field :email, autofocus: true, class: 'form-control' %>
                   </div>
 
@@ -69,18 +70,18 @@
                   <% end %>
 
                   <div class="form-group">
-                    <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
-                    <%= f.password_field :password, autocomplete: "off", class: 'form-control' %>
+                    <%= f.label :password %>
+                    <%= f.password_field :password, autocomplete: "off", class: 'form-control', :placeholder => "Leave blank if you don't want to change it" %>
                   </div>
 
                   <div class="form-group">
-                    <%= f.label :password_confirmation %><br />
+                    <%= f.label :password_confirmation %>
                     <%= f.password_field :password_confirmation, autocomplete: "off", class: 'form-control' %>
                   </div>
 
                   <div class="form-group">
-                    <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-                    <%= f.password_field :current_password, autocomplete: "off", class: 'form-control' %>
+                    <%= f.label :current_password %>
+                    <%= f.password_field :current_password, autocomplete: "off", class: 'form-control', :placeholder => "We need your current password to confirm your changes" %>
                   </div>
 
                   <%= f.submit "Update", class: "btn btn-success"%>

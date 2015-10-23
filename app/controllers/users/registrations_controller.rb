@@ -44,6 +44,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
       case action_name
         when 'new'
           false
+        when 'create'
+          false
         else
           'application'
       end

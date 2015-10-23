@@ -70,13 +70,19 @@
 
 
           <%= form_for(resource, as: resource_name, url: session_path(resource_name), role: 'form') do |f| %>
-              <div id="error_explanation">
-                <% flash.each do |name, msg| %>
-                    <ul><%="#{msg}" if msg.is_a?(String)%></ul>
-                <% end %>
-              </div>
               <fieldset>
               <h4>Welcome to Hungryman</h4><br/>
+
+              <!-- Error Message -->
+              <% if flash.count > 0 %>
+                <div class="alert alert-danger">
+                  <% flash.each do |name, msg| %>
+                      <ul><%="#{msg}" if msg.is_a?(String)%></ul>
+                  <% end %>
+                </div>
+              <% end %>
+              <!-- / End Error Message -->
+
               <div class="form-group">
                 <%= f.label :email %><br />
                 <%= f.email_field :email, autofocus: true, class: 'form-control' %>

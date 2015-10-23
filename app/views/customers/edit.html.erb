@@ -1,103 +1,78 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="">
-  <meta name="author" content="">
-
-  <title>Customer Profile - Edit</title>
-
-  <!-- Bootstrap Core CSS -->
-  <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-
-  <!-- MetisMenu CSS -->
-  <link href="/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
-
-  <!-- Custom CSS -->
-  <link href="/dist/css/sb-admin-2.css" rel="stylesheet">
-
-  <!-- Custom Fonts -->
-  <link href="../bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
-  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-  <![endif]-->
-
-</head>
-
-<body>
-
-<div class="container">
-  <div class="row">
-    <div class="col-md-6 col-md-offset-3">
-      <div class="login-panel panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Customer Profile - Edit</h3>
-        </div>
-        <%= form_for(@customer) do |f| %>
-            <% if @customer.errors.any? %>
-                <div id="error_explanation">
-                  <h2><%= pluralize(@customer.errors.count, "error") %> prohibited this user_customer from being saved:</h2>
-
-                  <ul>
-                    <% @customers.errors.full_messages.each do |message| %>
-                        <li><%= message %></li>
-                    <% end %>
-                  </ul>
+<div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header"></h2>
                 </div>
-            <% end %>
-            <div class="panel-body">
-              <form role="form" method="put">
-                <fieldset>
-                  <!--<div class="form-group">-->
-                    <!--<label>User_id:</label>-->
-                    <!--<%= @customer.user_id %>-->
-                  <!--</div>-->
-                  <div class="form-group">
-                    <%= f.label :name %><br>
-                    <%= f.text_field :name %>
-                  </div>
-                  <div class="form-group">
-                    <%= f.label :address %><br>
-                    <%= f.text_area :address %>
-                  </div>
-                  <div class="form-group">
-                    <%= f.label :zip %><br>
-                    <%= f.text_field :zip %>
-                  </div>
-                  <div class="form-group">
-                    <%= f.label :phone %><br>
-                    <%= f.text_field :phone %>
-                  </div>
-                  <%= f.submit "Save", class: "btn btn-lg btn-success btn-block"%>
-                </fieldset>
-        <% end %>
-        </form>
-        </div>
-      </div>
-    </div>
-  </div>
+                <!-- /.col-lg-12 -->
+            </div>
+
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Settings
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-pills">
+                                <li>
+                                    <a href="/users/edit" >Basic</a>
+                                </li>
+                                <li class="active">
+                                    <a href="#">Customer</a>
+                                </li>
+                            </ul>
+                            <br/>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div class="tab-pane fade in active" id="home-pills">
+                                  <%= form_for(@customer) do |f| %>
+                                    <% if @customer.errors.any? %>
+                                      <div class="alert alert-danger">
+                                        <h2><%= pluralize(@customer.errors.count, "error") %> prohibited this user_customer from being saved:</h2>
+
+                                        <ul>
+                                          <% @customers.errors.full_messages.each do |message| %>
+                                              <li><%= message %></li>
+                                          <% end %>
+                                        </ul>
+                                      </div>
+                                    <% end %>
+                                    <form role="form" method="post">
+                                        <fieldset>
+                                            <div class="form-group">
+                                                <%= f.label :name %>
+                                                <%= f.text_field :name, autofocus: true, class: 'form-control', :placeholder => "Name" %>
+                                            </div>
+                                            <div class="form-group">
+                                                <%= f.label :address %>
+                                                <%= f.text_area :address, class: 'form-control', :placeholder => "Address" %>
+                                            </div>
+                                            <div class="form-group">
+                                                <%= f.label :zip %>
+                                                <%= f.text_field :zip, class: 'form-control', :placeholder => "ZipCode" %>
+                                            </div>
+                                            <div class="form-group">
+                                                <%= f.label :phone %>
+                                                <%= f.text_field :phone, class: 'form-control', :placeholder => "Phone Number" %>
+                                            </div>
+
+                                            <button type="submit" class="btn btn-success">Save</button>
+                                            <button type="reset" class="btn btn-warning">Reset</a>
+                                        </fieldset>
+                                    </form>
+                                  <% end %>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-6 -->
+            </div>
+            <!-- /.row -->
 </div>
-
-<!-- jQuery -->
-<script src="/bower_components/jquery/dist/jquery.min.js"></script>
-
-<!-- Bootstrap Core JavaScript -->
-<script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-
-<!-- Metis Menu Plugin JavaScript -->
-<script src="/bower_components/metisMenu/dist/metisMenu.min.js"></script>
-
-<!-- Custom Theme JavaScript -->
-<script src="/dist/js/sb-admin-2.js"></script>
-
-</body>
-
-</html>

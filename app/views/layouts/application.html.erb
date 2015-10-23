@@ -29,10 +29,8 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-      <%= stylesheet_link_tag 'application', media: 'all',
-                              'data-turbolinks-track' => true %>
-      <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-      <%= csrf_meta_tags %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= csrf_meta_tags %>
 </head>
 
 <body>
@@ -136,7 +134,6 @@
         </nav>
 
 <%= yield %>
-<%= debug(params) if Rails.env.development? %>
 	</div>
     <!-- /#wrapper -->
 
@@ -155,33 +152,3 @@
 </body>
 
 </html>
-
-<!--<nav class="navbar navbar-inverse">-->
-  <!--<div class="container">-->
-    <!--<div class="navbar-header">-->
-      <!--<%= link_to 'Devise Demo', root_path, class: 'navbar-brand' %>-->
-    <!--</div>-->
-    <!--<div id="navbar">-->
-      <!--<ul class="nav navbar-nav">-->
-        <!--<li><%= link_to 'Home', root_path %></li>-->
-      <!--</ul>-->
-      <!--<ul class="nav navbar-nav pull-right">-->
-        <!--<% if user_signed_in? %>-->
-            <!--<li class="dropdown">-->
-              <!--<a class="dropdown-toggle" data-toggle="dropdown" href="#">-->
-                <!--<%= current_user.email %>-->
-                <!--<span class="caret"></span>-->
-              <!--</a>-->
-              <!--<ul class="dropdown-menu" role="menu">-->
-                <!--<li><%= link_to 'Profile', edit_user_registration_path %></li>`-->
-                <!--<li><%= link_to 'Log out', destroy_user_session_path, method: :delete %></li>-->
-              <!--</ul>-->
-            <!--</li>-->
-        <!--<% else %>-->
-            <!--<li><%= link_to 'Log In', new_user_session_path %></li>-->
-            <!--<li><%= link_to 'Sign Up', new_user_registration_path %></li>-->
-        <!--<% end %>-->
-      <!--</ul>-->
-    <!--</div>-->
-  <!--</div>-->
-<!--</nav>-->

@@ -83,25 +83,24 @@
               <fieldset>
 
                 <div class="form-group">
-                  <%= f.label :role %><br />
+                  <%= f.label :role %>
                   <%= f.select :role, %w[Customer Restaurant Carrier], {}, class: 'form-control'%>
                 </div>
 
                 <div class="form-group">
-                  <%= f.label :email %><br />
+                  <%= f.label :email %>
                   <%= f.email_field :email, autofocus: true, class: 'form-control' %>
                 </div>
 
                 <div class="form-group">
                   <%= f.label :password %>
                   <% if @minimum_password_length %>
-                    <em>(<%= @minimum_password_length %> characters minimum)</em>
-                  <% end %><br />
-                  <%= f.password_field :password, autocomplete: "off", class: 'form-control' %>
+                  <% end %>
+                  <%= f.password_field :password, autocomplete: "off", class: 'form-control', :placeholder => "#{@minimum_password_length} characters minimum" %>
                 </div>
 
                 <div class="form-group">
-                  <%= f.label :password_confirmation %><br />
+                  <%= f.label :password_confirmation %>
                   <%= f.password_field :password_confirmation, autocomplete: "off", class: 'form-control' %>
                 </div>
 
