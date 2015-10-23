@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
+  get 'restaurants/setting' => 'restaurants#edit'
+  get 'customers/setting'   => 'customers#edit'
   resources :restaurants
-  get 'customers/setting' => 'customers#edit'
   resources :customers
   devise_for :users, controllers: {registrations: "users/registrations", sessions: "users/sessions"}
   devise_scope :user do

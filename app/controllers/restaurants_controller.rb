@@ -42,7 +42,7 @@ class RestaurantsController < ApplicationController
   def update
     respond_to do |format|
       if @restaurant.update(restaurant_params)
-        format.html { redirect_to @restaurant, notice: 'Restaurant was successfully updated.' }
+        format.html { redirect_to '/restaurants/setting?feedback=succ' }
         format.json { render :show, status: :ok, location: @restaurant }
       else
         format.html { render :edit }
@@ -64,7 +64,7 @@ class RestaurantsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_restaurant
-      @restaurant = Restaurant.find(params[:id])
+      @restaurant = Restaurant.find_by(user_id: current_user.id)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
