@@ -51,7 +51,28 @@ class RestaurantsController < ApplicationController
       end
     end
   end
-
+  
+  
+  # for menu
+  def edit_food
+    
+  end
+  
+  def destroy_food
+  
+  end
+  
+  def create_food
+  
+  end
+  
+  
+  #...
+  def show_food
+  
+  end
+  
+  
   # DELETE /restaurants/1
   # DELETE /restaurants/1.json
   def destroy
