@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  rid: 1
+  name: MyString
+  price: 9.99
+  num_left: 1
+  num_sold: 1
+  description: MyText
+  image: MyString
+  File: MyString
+
+two:
+  rid: 1
+  name: MyString
+  price: 9.99
+  num_left: 1
+  num_sold: 1
+  description: MyText
+  image: MyString
+  File: MyString

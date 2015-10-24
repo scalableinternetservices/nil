@@ -63,13 +63,15 @@ class RestaurantsController < ApplicationController
   end
   
   def create_food
-  
+    #@food = Food.new(restaurant_id = current_restaurant.id)
+    
+    
   end
-  
   
   #...
   def show_food
-  
+    #@menu = Food.where("restaurant_id = ?", params[:restaurants])
+    @menu = Food.where(restaurant_id = 6)
   end
   
   
