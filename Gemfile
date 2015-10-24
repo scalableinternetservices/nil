@@ -49,4 +49,3 @@ group :development do
 
   # Use MySQL as the database for Active Record
 end
-
