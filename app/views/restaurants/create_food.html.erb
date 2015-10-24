@@ -3,3 +3,77 @@
 <p>
 Create Food Here!
 </p>
+
+<p id="notice"><%= notice %></p>
+<p> what ?</p>
+
+This page is for CreateFood!
+<p>
+  <strong>Id:</strong>
+  <%= @restaurant.id %>
+</p>
+<p>
+  <strong>Name:</strong>
+  <%= @restaurant.name %>
+</p>
+
+<p>
+  <strong>Address:</strong>
+  <%= @restaurant.address %>
+</p>
+
+<p>
+  <strong>Zip:</strong>
+  <%= @restaurant.zip %>
+</p>
+
+<p>
+  <strong>Phone:</strong>
+  <%= @restaurant.phone %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @restaurant.user %>
+</p>
+
+<%= link_to 'Edit', edit_restaurant_path(@restaurant) %> |
+<%= link_to 'Back', restaurants_path %>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Menu
+    </div>
+    <!-- /.panel-heading -->
+    <div class="panel-body">
+        <div class="dataTable_wrapper">
+            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Left Number</th>
+                        <th>Sold Number</th>
+                        <th>Description</th>
+                        <th>Image</th>
+                       <!-- <th>Option</th>-->
+                    </tr>
+                </thead>
+                <tbody>
+                    <% @menu.each do |food| %>
+                    <tr class="odd gradeX">
+                        <td><%= food.name %></td>
+                        <td class="center"><%= food.price %></td>
+                        <td><%= food.num_left %></td>
+                        <td><%= food.num_sold %></td>
+                        <td><%= food.description %></td>
+                        <td><%= food.image %></td>
+                    
+                    </tr>
+                    <% end %>
+                </tbody>
+            </table>
+        </div>
+        <!-- /.table-responsive -->
+    </div>
+    <!-- /.panel-body -->
+</div>
