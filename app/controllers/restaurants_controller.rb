@@ -1,6 +1,6 @@
 class RestaurantsController < ApplicationController
   before_action :check_access
-  before_action :set_restaurant, only: [:show, :edit, :update, :destroy]
+  before_action :set_restaurant, only: [:show, :create_food,:edit, :update, :destroy]
 
   # GET /restaurants
   # GET /restaurants.json
@@ -64,8 +64,6 @@ class RestaurantsController < ApplicationController
   
   def create_food
     #@food = Food.new(restaurant_id = current_restaurant.id)
-    
-    
   end
   
   #...
