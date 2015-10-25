@@ -2,10 +2,12 @@ class FoodsController < ApplicationController
   before_action :set_food, only: [:show,:edit, :update, :destroy]
   def index
     @foods = Food.all
+    @restaurant = Restaurant.find_by user_id: current_user.id
   end
   
   def new
     @food = Food.new
+    
   end
   
 #   def create
