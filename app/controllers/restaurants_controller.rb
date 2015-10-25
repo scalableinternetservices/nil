@@ -64,6 +64,7 @@ class RestaurantsController < ApplicationController
   
   def create_food
     #@food = Food.new(restaurant_id = current_restaurant.id)
+  
     @menu = Food.where(restaurant_id = 6)
   end
   

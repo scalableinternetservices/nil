@@ -1,0 +1,28 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Foods</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Price</th>
+      <th>RestID</th>
+      <th>Description</th>
+
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @foods.each do |food| %>
+      <tr>
+        <td><%= food.name %></td>
+        <td><%= food.price %></td>
+        <td><%= food.restaurant_id %></td>
+        <td><%= food.description %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+

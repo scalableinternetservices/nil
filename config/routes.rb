@@ -2,10 +2,12 @@ Rails.application.routes.draw do
   get 'restaurants/setting' => 'restaurants#edit'
   get 'customers/setting'   => 'customers#edit'
   get 'restaurants/menu' => 'restaurants#show_food'
-   get 'restaurants/edit_food' => 'restaurants#edit_food'
-      get 'restaurants/create_food' => 'restaurants#create_food'
+  get 'restaurants/edit_food' => 'restaurants#edit_food'
+  get 'restaurants/create_food' => 'restaurants#create_food'
     get 'restaurants/show' => 'restaurants#show'
-  resources :restaurants
+  resources :restaurants do
+    resources :foods
+  end
   resources :customers
   devise_for :users, controllers: {registrations: "users/registrations", sessions: "users/sessions"}
   devise_scope :user do
