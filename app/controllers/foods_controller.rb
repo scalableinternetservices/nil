@@ -1,8 +1,8 @@
 class FoodsController < ApplicationController
   before_action :set_food, only: [:show,:edit, :update, :destroy]
   def index
-    @foods = Food.all
     @restaurant = Restaurant.find_by user_id: current_user.id
+    @foods = Food.where(restaurant_id: @restaurant.id)
   end
   
   def new
@@ -25,6 +25,7 @@ class FoodsController < ApplicationController
 #   end
   
   def show
+    @food = Food.new
   end
 
   def edit
