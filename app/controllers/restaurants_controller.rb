@@ -24,33 +24,33 @@ class RestaurantsController < ApplicationController
 
   # POST /restaurants
   # POST /restaurants.json
-  def create
-    @restaurant = Restaurant.new(restaurant_params)
+  # def create
+  #   @restaurant = Restaurant.new(restaurant_params)
 
-    respond_to do |format|
-      if @restaurant.save
-        format.html { redirect_to @restaurant, notice: 'Restaurant was successfully created.' }
-        format.json { render :show, status: :created, location: @restaurant }
-      else
-        format.html { render :new }
-        format.json { render json: @restaurant.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+  #   respond_to do |format|
+  #     if @restaurant.save
+  #       format.html { redirect_to @restaurant, notice: 'Restaurant was successfully created.' }
+  #       format.json { render :show, status: :created, location: @restaurant }
+  #     else
+  #       format.html { render :new }
+  #       format.json { render json: @restaurant.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
   
-  # PATCH/PUT /restaurants/1
-  # PATCH/PUT /restaurants/1.json
-  def update
-    respond_to do |format|
-      if @restaurant.update(restaurant_params)
-        format.html { redirect_to '/restaurants/setting?feedback=succ' }
-        format.json { render :show, status: :ok, location: @restaurant }
-      else
-        format.html { render :edit }
-        format.json { render json: @restaurant.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+  # # PATCH/PUT /restaurants/1
+  # # PATCH/PUT /restaurants/1.json
+  # def update
+  #   respond_to do |format|
+  #     if @restaurant.update(restaurant_params)
+  #       format.html { redirect_to '/restaurants/setting?feedback=succ' }
+  #       format.json { render :show, status: :ok, location: @restaurant }
+  #     else
+  #       format.html { render :edit }
+  #       format.json { render json: @restaurant.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
   
   
   # for menu
@@ -87,9 +87,9 @@ class RestaurantsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_restaurant
-      @restaurant = Restaurant.find_by(user_id: current_user.id)
-    end
+    # def set_restaurant
+    #   @restaurant = Restaurant.find_by(user_id: current_user.id)
+    # end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def restaurant_params
