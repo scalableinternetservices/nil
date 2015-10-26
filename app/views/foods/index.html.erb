@@ -15,14 +15,14 @@
 
   <tbody>
     <% @foods.each do |food| %>
-    <% if food.restaurant_id == @restaurant.id%>
       <tr>
         <td><%= food.name %></td>
         <td><%= food.price %></td>
         <td><%= food.restaurant_id %></td>
         <td><%= food.description %></td>
+        <td><%= link_to 'Edit', edit_restaurant_food_path(@restaurant, food) %></td>
+        <td><%= link_to 'Destroy', restaurant_food_path(@restaurant, food), method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
-      <%end %>
     <% end %>
   </tbody>
 </table>

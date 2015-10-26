@@ -1,17 +1,22 @@
-<%= form_for(@food) do |f| %>
-  <div class="field">
+<%= form_for([@restaurant, @food]) do |f| %>
+<fieldset>
+  <div class="form-group">
     <%= f.label :name %><br>
-    <%= f.text_field :name %>
+    <%= f.text_field :name, class: 'form-control' %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= f.label :price %><br>
-    <%= f.text_area :price %>
+    <%= f.text_area :price, class: 'form-control', :value => number_with_precision(f.object.price) %>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= f.label :description %><br>
-    <%= f.text_field :description %>
+    <%= f.text_field :description, class: 'form-control' %>
   </div>
-  <div class="actions">
-    <%= f.submit %>
+    <div class="form-group">
+    <%= f.label :image %><br>
+     <%= f.file_field :image ,class: 'form-control'%>
   </div>
+  <button type="submit" class="btn btn-success">Save</button>
+  <button type="reset" class="btn btn-warning">Reset</a>
+  </fieldset>
 <% end %>

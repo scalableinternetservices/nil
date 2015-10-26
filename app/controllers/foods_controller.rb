@@ -1,26 +1,25 @@
 class FoodsController < ApplicationController
   before_action  only: [:show,:edit, :update, :destroy]
   def index
-    @foods = Food.all
+    #@foods = Food.all
     @restaurant = Restaurant.find_by user_id: current_user.id
+    @foods = @restaurant.foods
   end
   
   def new
     @food = Food.new
-    
+    @restaurant = Restaurant.find_by user_id: current_user.id
+
   end
   
   def create
-      @food = Food.new(food_params)
-
-      respond_to do |format|
+      @restaurant = Restaurant.find_by user_id: current_user.id
+      @food = @restaurant.foods.build(food_params)
       if @food.save
-        format.html { redirect_to @food, notice: 'Food was successfully created.' }
-        format.json { render :show, status: :created, location: @food }
+        # flash[:success] = "Successfully add your new food!"
+        redirect_to restaurant_foods_path(@restaurant)
       else
-        format.html { render :new }
-        format.json { render json: @food.errors, status: :unprocessable_entity }
-      end
+        render :new
     end
   end
   
@@ -28,14 +27,29 @@ class FoodsController < ApplicationController
   end
 
   def edit
+    @restaurant = Restaurant.find_by user_id: current_user.id
+    @food = @restaurant.foods.find(params[:id])
   end
   
   def update
-  
+    @restaurant = Restaurant.find_by user_id: current_user.id
+    @food = @restaurant.foods.find(params[:id])
+    if @food.update(food_params)
+      redirect_to restaurant_foods_path(@restaurant)
+    else
+      render :edit
+    end
   end
   
   def destroy
-  
+      @restaurant = Restaurant.find_by user_id: current_user.id
+      @food = @restaurant.foods.find(params[:id])
+    if @food.destroy
+      redirect_to restaurant_foods_path(@restaurant)
+    else
+      render @restaurant
+    end
+      
   end
   
     private
@@ -46,7 +60,7 @@ class FoodsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def food_params
-      params.require(:food).permit(:name, :price, :description, :restaurant_id)
+      params.require(:food).permit(:name, :price, :description, :restaurant_id,:image)
     end
     
 end
