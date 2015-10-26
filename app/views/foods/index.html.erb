@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 <h1>Listing Foods</h1>
-<!--<%= @restaurant.id %>-->
+<%= @restaurant.id %>
 <table>
   <thead>
     <tr>
@@ -15,14 +15,14 @@
 
   <tbody>
     <% @foods.each do |food| %>
-    <!--<% if food.restaurant_id == @restaurant.id%>-->
+    <% if food.restaurant_id == @restaurant.id%>
       <tr>
         <td><%= food.name %></td>
         <td><%= food.price %></td>
         <td><%= food.restaurant_id %></td>
         <td><%= food.description %></td>
       </tr>
-      <!--<%end %>-->
+      <%end %>
     <% end %>
   </tbody>
 </table>
