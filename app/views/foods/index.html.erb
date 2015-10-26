@@ -1,31 +1,41 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Foods</h1>
-<%= @restaurant.id %>
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Price</th>
-      <th>RestID</th>
-      <th>Description</th>
-
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @foods.each do |food| %>
-      <tr>
-        <td><%= food.name %></td>
-        <td><%= food.price %></td>
-        <td><%= food.restaurant_id %></td>
-        <td><%= food.description %></td>
-        <td><%= link_to 'Edit', edit_restaurant_food_path(@restaurant, food) %></td>
-        <td><%= link_to 'Destroy', restaurant_food_path(@restaurant, food), method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <b> <%= @restaurant.name %> Menu</b>
+    </div>
+    <!-- /.panel-heading -->
+    <div class="panel-body">
+        <div class="dataTable_wrapper">
+            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Left Number</th>
+                        <th>Sold Number</th>
+                        <th>Description</th>
+                        <th>Image</th>
+                        <th>Option</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% @foods.each do |food| %>
+                    <tr class="odd gradeX">
+                        <td><%= link_to food.name, restaurant_food_path(@restaurant, food) %></td>
+                        <td class="center"><%= food.price %></td>
+                        <td><%= food.num_left %></td>
+                        <td><%= food.num_sold %></td>
+                        <td><%= truncate(strip_tags(food.description), length: 80) %></td>
+                        <td><%= image_tag(food.image, class: 'food_list_image') %></td> <!-- style invalid -->
+                         <td><%= link_to 'Edit', edit_restaurant_food_path(@restaurant, food) %></td>
+                        <td><%= link_to 'Destroy', restaurant_food_path(@restaurant, food), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                    </tr>
+                    <% end %>
+                </tbody>
+            </table>
+        </div>
+        <!-- /.table-responsive -->
+    </div>
+    <!-- /.panel-body -->
+</div>

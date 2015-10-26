@@ -1,9 +1,11 @@
 class FoodsController < ApplicationController
   before_action  only: [:show,:edit, :update, :destroy]
+  
   def index
     #@foods = Food.all
     @restaurant = Restaurant.find_by user_id: current_user.id
     @foods = @restaurant.foods
+
   end
   
   def new
@@ -20,10 +22,12 @@ class FoodsController < ApplicationController
         redirect_to restaurant_foods_path(@restaurant)
       else
         render :new
-    end
+      end
   end
   
   def show
+    @food = Food.find(params[:id])
+    @restaurant = Restaurant.find_by user_id: current_user.id
   end
 
   def edit
