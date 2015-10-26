@@ -21,12 +21,12 @@
                 <tbody>
                     <% @foods.each do |food| %>
                     <tr class="odd gradeX">
-                        <td><%= food.name %></td>
+                        <td><%= link_to food.name, restaurant_food_path(@restaurant, food) %></td>
                         <td class="center"><%= food.price %></td>
                         <td><%= food.num_left %></td>
                         <td><%= food.num_sold %></td>
-                        <td><%= food.description %></td>
-                        <td><%= food.image %></td>
+                        <td><%= truncate(strip_tags(food.description), length: 80) %></td>
+                        <td><%= image_tag(food.image, class: 'food_list_image') %></td> <!-- style invalid -->
                     </tr>
                     <% end %>
                 </tbody>

@@ -25,7 +25,8 @@ class FoodsController < ApplicationController
   end
   
   def show
-    @food = Food.new
+    @food = Food.find(params[:id])
+    @restaurant = Restaurant.find_by user_id: current_user.id
   end
 
   def edit
