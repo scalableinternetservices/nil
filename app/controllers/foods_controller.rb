@@ -11,12 +11,12 @@ class FoodsController < ApplicationController
   def new
     @food = Food.new
     @restaurant = Restaurant.find_by user_id: current_user.id
-
   end
   
   def create
       @restaurant = Restaurant.find_by user_id: current_user.id
       @food = @restaurant.foods.build(food_params)
+      upload
       if @food.save
         # flash[:success] = "Successfully add your new food!"
         redirect_to restaurant_foods_path(@restaurant)
@@ -38,6 +38,7 @@ class FoodsController < ApplicationController
   def update
     @restaurant = Restaurant.find_by user_id: current_user.id
     @food = @restaurant.foods.find(params[:id])
+    upload
     if @food.update(food_params)
       redirect_to restaurant_foods_path(@restaurant)
     else
@@ -64,7 +65,20 @@ class FoodsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def food_params
-      params.require(:food).permit(:name, :price, :description, :restaurant_id,:image)
+      params.require(:food).permit(:name, :price, :description, :restaurant_id)
+    end
+    
+        
+    def upload
+        if uploaded_io = params[:food][:image]
+          file_name = "#{@restaurant.id}_#{@food.id}.jpg"
+          File.open(Rails.root.join('public', 'images', file_name), 'wb') do |file|
+              file.write(uploaded_io.read)
+          end
+          @food.update image: file_name
+        elsif !@food.image
+          @food.update image: 'lays-classic.png'
+        end
     end
     
 end
