@@ -2,8 +2,7 @@ class FoodsController < ApplicationController
   before_action  only: [:show,:edit, :update, :destroy]
   
   def index
-    #@foods = Food.all
-    @restaurant = Restaurant.find_by user_id: current_user.id
+    @restaurant = Restaurant.find(params[:restaurant_id])
     @foods = @restaurant.foods
 
   end
@@ -27,7 +26,7 @@ class FoodsController < ApplicationController
   
   def show
     @food = Food.find(params[:id])
-    @restaurant = Restaurant.find_by user_id: current_user.id
+    @restaurant = Restaurant.find(params[:restaurant_id])
   end
 
   def edit

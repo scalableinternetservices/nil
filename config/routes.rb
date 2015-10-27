@@ -2,8 +2,9 @@ Rails.application.routes.draw do
   get 'restaurants/setting' => 'restaurants#edit'
   get 'customers/setting'   => 'customers#edit'
   get 'restaurants/menu' => 'restaurants#show_food'
-
+  get 'restaurants/:id' => 'foods#index'
   get 'restaurants/show' => 'restaurants#show'
+  #get '/restaurant/:restaurant_id/:id' => 'foods#show'
   resources :restaurants do
     resources :foods
   end

@@ -1,4 +1,8 @@
 // Place all the styles related to the Foods controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-.food_detail_image {width:80px;height:100px;}
+.foods {
+    .food_detail_image {width:80px;height:100px;}
+    .food_list_image {width:80px;height:100px;}
+    #TEST{color:red;}
+}

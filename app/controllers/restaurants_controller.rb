@@ -52,29 +52,6 @@ class RestaurantsController < ApplicationController
     end
   end
   
-  
-  # for menu
-  def edit_food
-    
-  end
-  
-  def destroy_food
-  
-  end
-  
-  def create_food
-    #@food = Food.new(restaurant_id = current_restaurant.id)
-  
-    @menu = Food.where(restaurant_id = 6)
-  end
-  
-  #...
-  def show_food
-    #@menu = Food.where("restaurant_id = ?", params[:restaurants])
-    @menu = Food.where(restaurant_id = 6)
-  end
-  
-  
   # DELETE /restaurants/1
   # DELETE /restaurants/1.json
   def destroy

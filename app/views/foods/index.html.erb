@@ -1,9 +1,33 @@
 <p id="notice"><%= notice %></p>
-
 <div class="panel panel-default">
     <div class="panel-heading">
         <b> <%= @restaurant.name %> Menu</b>
     </div>
+    <% if current_user.role == "customer" %>
+    <div class="panel-body">
+        <div class="row">
+            <% @foods.each do |food| %>
+            <div class="col-lg-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <%= link_to food.name, restaurant_food_path(@restaurant, food) %>
+                        <span class = "pull-right">$<%= food.price %></span>
+                    </div>
+                    <div class="panel-body">
+                        <%= image_tag(food.image, class: 'food_list_image',  size: "120x150") %>
+                        <span class = "pull-right"><%= truncate(strip_tags(food.description), length: 80) %></span>
+                    </div>
+                    <div class="panel-footer">
+                        <button type="submit" class="btn btn-success">Order</button>
+                        <span class = "pull-right">Available Number: <%= food.num_left %>/<%= food.num_left + food.num_sold %></span>
+                    </div>
+                </div>
+            </div>
+            <% end %>
+            <!-- /.col-lg-4 -->
+        </div>
+    </div>
+    <% elsif current_user.role == "restaurant" %>
     <!-- /.panel-heading -->
     <div class="panel-body">
         <div class="dataTable_wrapper">
@@ -26,10 +50,12 @@
                         <td class="center"><%= food.price %></td>
                         <td><%= food.num_left %></td>
                         <td><%= food.num_sold %></td>
-                        <td><%= truncate(strip_tags(food.description), length: 80) %></td>
-                        <td><%= image_tag(food.image, class: 'food_list_image') %></td> <!-- style invalid -->
-                         <td><%= link_to 'Edit', edit_restaurant_food_path(@restaurant, food) %>
-                        <%= link_to 'Destroy', restaurant_food_path(@restaurant, food), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                        <td><%= truncate(strip_tags(food.description), length: 200) %></td>
+                        <td><%= image_tag(food.image, class: 'food_list_image',size: "60x80") %></td> <!-- style invalid -->
+                        <td>
+                            <%= link_to 'Edit', edit_restaurant_food_path(@restaurant, food) %>
+                            <%= link_to 'Destroy', restaurant_food_path(@restaurant, food), method: :delete, data: { confirm: 'Are you sure?' } %>
+                        </td>
                     </tr>
                     <% end %>
                 </tbody>
@@ -37,5 +63,6 @@
         </div>
         <!-- /.table-responsive -->
     </div>
+    <% end %>
     <!-- /.panel-body -->
 </div>
