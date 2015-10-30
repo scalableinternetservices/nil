@@ -1,11 +1,16 @@
 class OrdersController < ApplicationController
   before_action :set_order, only: [:show, :edit, :update, :destroy]
   before_action :set_order_customers, only: [:show_customers]
+  before_action :check_access_customer, only: [:index_customers, :show_customers, :new]
 
   # GET /orders
   # GET /orders.json
   def index
-    @orders = Order.all
+    #@orders = Order.all
+    if (current_user.role.downcase == "customer")
+      redirect_to "/customers/order"
+    end
+    render html: ""
   end
 
   def index_customers
@@ -99,5 +104,11 @@ class OrdersController < ApplicationController
     def order_params
       #params.require(:order).permit(:price, :paid, :ready, :assigned, :arrived, :address, :zip, :phone, :shipped_at, :arrived_at, :confirmed_at, :restaurant_id, :customer_id)
       params.require(:order).permit(:food_id, :address, :zip, :phone)
+    end
+
+    def check_access_customer
+      if current_user.role.downcase != "customer"
+        render html: "Access denied.".html_safe and return
+      end
     end
 end
