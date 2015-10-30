@@ -23,9 +23,9 @@
                         <td><%=
                         if order.arrived
                           "Arrived at #{order.arrived_at}"
-                        elsif order.shipped
+                        elsif order.shipped_at != nil
                           "Shipped at #{order.shipped_at}"
-                        elsif order.confirm
+                        elsif order.confirmed_at != nil
                           "Confirmed at #{order.confirmed_at}"
                         elsif order.paid
                           "Pending Confirm"
