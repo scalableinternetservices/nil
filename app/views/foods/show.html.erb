@@ -1,0 +1,44 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-10">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Food Details</h3>
+        </div>
+        <div class="panel-body">
+          <form role="form" method="get">
+            <fieldset>
+              <div class="form-group">
+                  <%= image_tag(@food.image, class: 'food_detail_image', size: "240x320") %><!-- style invalid -->
+              </div>
+              <div class="form-group">
+                <label>Name:</label>
+                <%= @food.name %>
+              </div>
+              <div class="form-group">
+                <label>Price:</label>
+                <%= @food.price %>
+              </div>
+              <div class="form-group">
+                <label>Available:</label>
+                <%= @food.num_left %>
+              </div>
+              <div class="form-group">
+                <label>Sales:</label>
+                <%= @food.num_sold %>
+              </div>
+              <div class="form-group">
+                <label>Discription:</label>
+                <%= @food.description %>
+              </div>
+              <% if current_user.role == "restaurant" %>
+              <button class="btn btn-edit"><%= link_to 'Edit', edit_restaurant_food_path() %></button>
+              <% end %>
+              <button class="btn btn-basic"><%= link_to 'Back', restaurant_foods_url(@restaurant) %></button>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

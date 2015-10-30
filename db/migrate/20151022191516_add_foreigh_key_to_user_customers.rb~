@@ -1,6 +1,0 @@
-class AddForeighKeyToUserCustomers < ActiveRecord::Migration
-  def change
-		add_reference :user_customers, :user, index: true
-		add_index :user_customers, :user_id
-  end
-end

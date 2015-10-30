@@ -125,6 +125,11 @@
                         <li>
                             <a href="/"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
+                        <% if current_user.role.downcase == "customer" %>
+                        <li>
+                            <a href="/customers/order"><i class="fa fa-table fa-fw"></i> Orders</a>
+                        </li>
+                        <% end %>
 
                     </ul>
                 </div>
@@ -132,8 +137,9 @@
             </div>
             <!-- /.navbar-static-side -->
         </nav>
-
+ <div id="page-wrapper" class='<%= controller.controller_name %>'>
 <%= yield %>
+</div>
 	</div>
     <!-- /#wrapper -->
 

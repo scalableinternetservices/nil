@@ -1,12 +1,24 @@
 Rails.application.routes.draw do
+  resources :orders
   get 'restaurants/setting' => 'restaurants#edit'
   get 'customers/setting'   => 'customers#edit'
-  resources :restaurants
+  get 'customers/order'     => 'orders#index_customers'
+  get 'customers/order/:id' => 'orders#show_customers'
+  get 'orders/new/:id'      => 'orders#new'
+  get 'restaurants/menu' => 'restaurants#show_food'
+  get 'restaurants/:id' => 'foods#index'
+  get 'restaurants/show' => 'restaurants#show'
+  #get '/restaurant/:restaurant_id/:id' => 'foods#show'
+  resources :restaurants do
+    resources :foods
+  end
   resources :customers
   devise_for :users, controllers: {registrations: "users/registrations", sessions: "users/sessions"}
   devise_scope :user do
     root "users/sessions#new"
   end
+  
+ # resources :foods, only: [:index, :show]
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
