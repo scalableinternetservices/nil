@@ -98,6 +98,10 @@ class OrdersController < ApplicationController
 
     def set_order_customers
       @order = Order.find(params[:id])
+
+      if @order.user_id != current_user.id
+        render html: "Access denied. Not your order.".html_safe and return
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
