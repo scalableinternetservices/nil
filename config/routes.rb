@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :orders
   get 'restaurants/setting' => 'restaurants#edit'
   get 'customers/setting'   => 'customers#edit'
   get 'restaurants/menu' => 'restaurants#show_food'
