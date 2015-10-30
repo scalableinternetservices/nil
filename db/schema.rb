@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151024022846) do
+ActiveRecord::Schema.define(version: 20151030053848) do
 
   create_table "customers", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -38,6 +38,27 @@ ActiveRecord::Schema.define(version: 20151024022846) do
   end
 
   add_index "foods", ["restaurant_id"], name: "index_foods_on_restaurant_id", using: :btree
+
+  create_table "orders", force: :cascade do |t|
+    t.decimal  "price",                       precision: 5, scale: 2
+    t.boolean  "paid"
+    t.boolean  "ready"
+    t.boolean  "assigned"
+    t.boolean  "arrived"
+    t.text     "address",       limit: 65535
+    t.string   "zip",           limit: 255
+    t.string   "phone",         limit: 255
+    t.datetime "shipped_at"
+    t.datetime "arrived_at"
+    t.datetime "confirmed_at"
+    t.integer  "restaurant_id", limit: 4
+    t.integer  "customer_id",   limit: 4
+    t.datetime "created_at",                                          null: false
+    t.datetime "updated_at",                                          null: false
+  end
+
+  add_index "orders", ["customer_id"], name: "index_orders_on_customer_id", using: :btree
+  add_index "orders", ["restaurant_id"], name: "index_orders_on_restaurant_id", using: :btree
 
   create_table "restaurants", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -72,5 +93,7 @@ ActiveRecord::Schema.define(version: 20151024022846) do
 
   add_foreign_key "customers", "users"
   add_foreign_key "foods", "restaurants"
+  add_foreign_key "orders", "customers"
+  add_foreign_key "orders", "restaurants"
   add_foreign_key "restaurants", "users"
 end
