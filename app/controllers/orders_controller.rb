@@ -9,7 +9,7 @@ class OrdersController < ApplicationController
   end
 
   def index_customers
-    @orders = Order.where(:customer => current_user.id)
+    @orders = Order.where(:user_id => current_user.id)
   end
 
   def show_customers
@@ -20,6 +20,9 @@ class OrdersController < ApplicationController
   # GET /orders/1
   # GET /orders/1.json
   def show
+    if current_user.role.downcase == "customer"
+      redirect_to "/customers/order/#{params[:id]}"
+    end
   end
 
   # GET /orders/new
@@ -38,6 +41,14 @@ class OrdersController < ApplicationController
   # POST /orders.json
   def create
     @order = Order.new(order_params)
+    @food = Food.find(params[:food_id])
+    @order.user_id = current_user.id
+    @order.price = @food.price
+    @order.restaurant_id = @food.restaurant_id
+    @order.paid = 0
+    @order.ready = 0
+    @order.assigned = 0
+    @order.arrived = 0
 
     respond_to do |format|
       if @order.save
@@ -86,6 +97,7 @@ class OrdersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_params
-      params.require(:order).permit(:price, :paid, :ready, :assigned, :arrived, :address, :zip, :phone, :shipped_at, :arrived_at, :confirmed_at, :restaurant_id, :customer_id)
+      #params.require(:order).permit(:price, :paid, :ready, :assigned, :arrived, :address, :zip, :phone, :shipped_at, :arrived_at, :confirmed_at, :restaurant_id, :customer_id)
+      params.require(:order).permit(:food_id, :address, :zip, :phone)
     end
 end
