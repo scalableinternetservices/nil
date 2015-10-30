@@ -2,6 +2,9 @@ Rails.application.routes.draw do
   resources :orders
   get 'restaurants/setting' => 'restaurants#edit'
   get 'customers/setting'   => 'customers#edit'
+  get 'customers/order'     => 'orders#index_customers'
+  get 'customers/order/:id' => 'orders#show_customers'
+  get 'orders/new/:id'      => 'orders#new'
   get 'restaurants/menu' => 'restaurants#show_food'
   get 'restaurants/:id' => 'foods#index'
   get 'restaurants/show' => 'restaurants#show'

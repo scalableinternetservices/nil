@@ -18,7 +18,7 @@
                         <span class = "pull-right"><%= truncate(strip_tags(food.description), length: 80) %></span>
                     </div>
                     <div class="panel-footer">
-                        <button type="submit" class="btn btn-success">Order</button>
+                        <a class="btn btn-success" href="/orders/new/<%= food.id %>">Order</a>
                         <span class = "pull-right">Available Number: <%= food.num_left %>/<%= food.num_left + food.num_sold %></span>
                     </div>
                 </div>

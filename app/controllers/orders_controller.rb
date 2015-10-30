@@ -1,10 +1,20 @@
 class OrdersController < ApplicationController
   before_action :set_order, only: [:show, :edit, :update, :destroy]
+  before_action :set_order_customers, only: [:show_customers]
 
   # GET /orders
   # GET /orders.json
   def index
     @orders = Order.all
+  end
+
+  def index_customers
+    @orders = Order.where(:customer => current_user.id)
+  end
+
+  def show_customers
+    # @food = Food.where(:id => @order.food_id)
+    @restaurant = Restaurant.find(@order.restaurant_id)
   end
 
   # GET /orders/1
@@ -14,6 +24,9 @@ class OrdersController < ApplicationController
 
   # GET /orders/new
   def new
+    @customer = Customer.find_by(user_id: current_user.id)
+    @food = Food.find(params[:id])
+    @restaurant = Restaurant.find(@food.restaurant_id)
     @order = Order.new
   end
 
@@ -64,6 +77,10 @@ class OrdersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_order
+      @order = Order.find(params[:id])
+    end
+
+    def set_order_customers
       @order = Order.find(params[:id])
     end
 

@@ -1,0 +1,45 @@
+<p id="notice"><%= notice %></p>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <b>My Orders</b>
+    </div>
+    <!-- /.panel-heading -->
+    <div class="panel-body">
+        <div class="dataTable_wrapper">
+            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th>Option</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% @orders.each do |order| %>
+                    <tr class="odd gradeX">
+                        <td><%= order.id %></td>
+                        <td><%= order.price %></td>
+                        <td><%=
+                        if order.arrived
+                          "Arrived at #{order.arrived_at}"
+                        elsif order.shipped
+                          "Shipped at #{order.shipped_at}"
+                        elsif order.confirm
+                          "Confirmed at #{order.confirmed_at}"
+                        elsif order.paid
+                          "Pending Confirm"
+                        else
+                          "Unpaid"
+                        end
+                        %></td>
+                        <td><a href="/customers/order/<%= order.id %>">View</a></td>
+                    </tr>
+                    <% end %>
+                </tbody>
+            </table>
+        </div>
+        <!-- /.table-responsive -->
+    </div>
+    <!-- /.panel-body -->
+</div>
