@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   resources :orders
+  resources :comments
   get 'restaurants/setting' => 'restaurants#edit'
   get 'customers/setting'   => 'customers#edit'
   get 'customers/order'     => 'orders#index_customers'
