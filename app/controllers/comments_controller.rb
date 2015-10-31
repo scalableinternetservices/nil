@@ -4,51 +4,61 @@ class CommentsController < ApplicationController
   # GET /comments
   # GET /comments.json
   def index
-    @comments = Comment.all
+    @restaurant = Restaurant.find(params[:restaurant_id])
+    @comments = @restaurant.comments
   end
 
   # GET /comments/1
   # GET /comments/1.json
   def show
+    @comment = Comment.find(params[:id])
+    @restaurant = Restaurant.find(params[:restaurant_id])
   end
 
   # GET /comments/new
   def new
     @comment = Comment.new
+    @restaurant = Restaurant.find(params[:restaurant_id])
+    @customer = Customer.find_by user_id: current_user.id
   end
 
   # GET /comments/1/edit
   def edit
+    @customer = Customer.find_by user_id: current_user.id
+    @restaurant = Restaurant.find(params[:restaurant_id])
+    @comment = Comment.find(params[:id])
   end
 
   # POST /comments
   # POST /comments.json
   def create
-    @comment = Comment.new(comment_params)
-
-    respond_to do |format|
+    @restaurant = Restaurant.find(params[:restaurant_id])
+    @customer = Customer.find_by user_id: current_user.id
+    @comment = @restaurant.comments.build(comment_params)
+    #respond_to do |format|
       if @comment.save
-        format.html { redirect_to @comment, notice: 'Comment was successfully created.' }
-        format.json { render :show, status: :created, location: @comment }
+        # format.html { redirect_to @comment, notice: 'Comment was successfully created.' }
+        # format.json { render :show, status: :created, location: @comment }
       else
         format.html { render :new }
-        format.json { render json: @comment.errors, status: :unprocessable_entity }
+        # format.json { render json: @comment.errors, status: :unprocessable_entity }
       end
-    end
   end
 
   # PATCH/PUT /comments/1
   # PATCH/PUT /comments/1.json
   def update
-    respond_to do |format|
+    @restaurant = Restaurant.find(params[:restaurant_id])
+    @customer = Customer.find_by user_id: current_user.id
+    @comment = @restaurant.comments.build(comment_params)
+    #respond_to do |format|
       if @comment.update(comment_params)
-        format.html { redirect_to @comment, notice: 'Comment was successfully updated.' }
-        format.json { render :show, status: :ok, location: @comment }
+        # format.html { redirect_to @comment, notice: 'Comment was successfully updated.' }
+        # format.json { render :show, status: :ok, location: @comment }
       else
         format.html { render :edit }
-        format.json { render json: @comment.errors, status: :unprocessable_entity }
+        # format.json { render json: @comment.errors, status: :unprocessable_entity }
       end
-    end
   end
 
   # DELETE /comments/1
