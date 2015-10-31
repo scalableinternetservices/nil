@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :comments
   get 'restaurants/setting' => 'restaurants#edit'
   get 'customers/setting'   => 'customers#edit'
   resources :restaurants

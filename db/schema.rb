@@ -11,7 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151023063242) do
+ActiveRecord::Schema.define(version: 20151031005858) do
+
+  create_table "comments", force: :cascade do |t|
+    t.text     "message",       limit: 65535
+    t.integer  "restaurant_id", limit: 4
+    t.integer  "customer_id",   limit: 4
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+  end
+
+  add_index "comments", ["customer_id"], name: "index_comments_on_customer_id", using: :btree
+  add_index "comments", ["restaurant_id"], name: "index_comments_on_restaurant_id", using: :btree
 
   create_table "customers", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -24,6 +35,43 @@ ActiveRecord::Schema.define(version: 20151023063242) do
   end
 
   add_index "customers", ["user_id"], name: "index_customers_on_user_id", using: :btree
+
+  create_table "foods", force: :cascade do |t|
+    t.string   "name",          limit: 255,                                       null: false
+    t.decimal  "price",                       precision: 5, scale: 2
+    t.integer  "num_left",      limit: 4,                             default: 0
+    t.integer  "num_sold",      limit: 4,                             default: 0
+    t.text     "description",   limit: 65535
+    t.string   "image",         limit: 255
+    t.integer  "restaurant_id", limit: 4
+    t.datetime "created_at",                                                      null: false
+    t.datetime "updated_at",                                                      null: false
+  end
+
+  add_index "foods", ["restaurant_id"], name: "index_foods_on_restaurant_id", using: :btree
+
+  create_table "orders", force: :cascade do |t|
+    t.decimal  "price",                       precision: 5, scale: 2
+    t.boolean  "paid"
+    t.boolean  "ready"
+    t.boolean  "assigned"
+    t.boolean  "arrived"
+    t.text     "address",       limit: 65535
+    t.string   "zip",           limit: 255
+    t.string   "phone",         limit: 255
+    t.datetime "shipped_at"
+    t.datetime "arrived_at"
+    t.datetime "confirmed_at"
+    t.integer  "restaurant_id", limit: 4
+    t.datetime "created_at",                                          null: false
+    t.datetime "updated_at",                                          null: false
+    t.integer  "food_id",       limit: 4
+    t.integer  "user_id",       limit: 4
+  end
+
+  add_index "orders", ["food_id"], name: "index_orders_on_food_id", using: :btree
+  add_index "orders", ["restaurant_id"], name: "index_orders_on_restaurant_id", using: :btree
+  add_index "orders", ["user_id"], name: "index_orders_on_user_id", using: :btree
 
   create_table "restaurants", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -56,6 +104,12 @@ ActiveRecord::Schema.define(version: 20151023063242) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "comments", "customers"
+  add_foreign_key "comments", "restaurants"
   add_foreign_key "customers", "users"
+  add_foreign_key "foods", "restaurants"
+  add_foreign_key "orders", "foods"
+  add_foreign_key "orders", "restaurants"
+  add_foreign_key "orders", "users"
   add_foreign_key "restaurants", "users"
 end
