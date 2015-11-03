@@ -35,10 +35,12 @@ class CommentsController < ApplicationController
     @restaurant = Restaurant.find(params[:restaurant_id])
     @customer = Customer.find_by user_id: current_user.id
     @comment = @restaurant.comments.build(comment_params)
+    @comment.customer_id = @customer.id
     #respond_to do |format|
       if @comment.save
         # format.html { redirect_to @comment, notice: 'Comment was successfully created.' }
         # format.json { render :show, status: :created, location: @comment }
+        redirect_to restaurant_comments_path(@restaurant)
       else
         format.html { render :new }
         # format.json { render json: @comment.errors, status: :unprocessable_entity }
@@ -50,11 +52,11 @@ class CommentsController < ApplicationController
   def update
     @restaurant = Restaurant.find(params[:restaurant_id])
     @customer = Customer.find_by user_id: current_user.id
-    @comment = @restaurant.comments.build(comment_params)
     #respond_to do |format|
       if @comment.update(comment_params)
         # format.html { redirect_to @comment, notice: 'Comment was successfully updated.' }
         # format.json { render :show, status: :ok, location: @comment }
+        redirect_to restaurant_comments_path(@restaurant)
       else
         format.html { render :edit }
         # format.json { render json: @comment.errors, status: :unprocessable_entity }
