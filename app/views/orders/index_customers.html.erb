@@ -33,7 +33,12 @@
                           "Unpaid"
                         end
                         %></td>
-                        <td><a href="/customers/order/<%= order.id %>">View</a></td>
+                        <td>
+                        <% if not order.paid %>
+                            <a class="btn btn-info" href="/orders/pay/<%= order.id %>">Pay</a>
+                        <% end %>
+                            <a class="btn btn-info" href="/customers/order/<%= order.id %>">View</a>
+                        </td>
                     </tr>
                     <% end %>
                 </tbody>
