@@ -15,17 +15,21 @@ class OrdersController < ApplicationController
 
   def index_customers
     if params[:filter] == "ongoing"
-      @orders = Order.where(:user_id => current_user.id,
+      @orders = Order.select("orders.*, restaurants.name AS rest_name, foods.name AS food_name")
+                          .where(:user_id => current_user.id,
                             :arrived_at => nil
-                            ).joins("LEFT JOIN foods ON foods.id = orders.food_id")
+                          ).joins("LEFT JOIN foods ON foods.id = orders.food_id LEFT JOIN restaurants ON restaurants.id = orders.restaurant_id")
     else
-      @orders = Order.where(:user_id => current_user.id)
+      @orders = Order.select("orders.*, restaurants.name AS rest_name, foods.name AS food_name")
+                          .where(:user_id => current_user.id
+                          ).joins("LEFT JOIN foods ON foods.id = orders.food_id LEFT JOIN restaurants ON restaurants.id = orders.restaurant_id")
     end
   end
 
   def show_customers
     # @food = Food.where(:id => @order.food_id)
     @restaurant = Restaurant.find(@order.restaurant_id)
+    @food = Food.find(@order.food_id)
   end
 
   # GET /orders/1
@@ -59,6 +63,7 @@ class OrdersController < ApplicationController
   def create
     @order = Order.new(order_params)
     @food = Food.find(params[:food_id])
+    @order.food_id = params[:food_id]
     @order.user_id = current_user.id
     @order.price = @food.price
     @order.restaurant_id = @food.restaurant_id
