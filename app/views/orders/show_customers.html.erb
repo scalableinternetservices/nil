@@ -58,7 +58,7 @@
                                     <%= @order.phone %>
                                 </div>
 
-
+                                <% if not @order.paid %><a class="btn btn-info" href="/orders/pay/<%= @order.id %>">Pay Bill</a><% end %>
                                 <a class="btn btn-info" href="/customers/order">Return</a>
                             </fieldset>
                         </form>
