@@ -1,9 +1,9 @@
 class OrdersController < ApplicationController
   before_action :check_access_customer, only: [:index_customers, :show_customers, :new, :pay]
   before_action :set_order, only: [:show, :edit, :update, :destroy]
-  before_action :set_restaurants, only: [:index_restaurants, :show_restaurants]
+  before_action :set_restaurants, only: [:index_restaurants, :show_restaurants, :confirmed]
   before_action :set_order_customers, only: [:show_customers, :pay]
-  before_action :set_order_restaurants, only: [:show_restaurants]
+  before_action :set_order_restaurants, only: [:show_restaurants, :confirmed]
 
   # GET /orders
   # GET /orders.json
@@ -16,10 +16,10 @@ class OrdersController < ApplicationController
   end
 
   def index_customers
-    if params[:filter] == "pending-confirmed"
+    if params[:filter] == "ongoing"
       @orders = Order.select("orders.*, restaurants.name AS rest_name, foods.name AS food_name")
                           .where(:user_id => current_user.id,
-                            :confirmed_at => nil
+                            :arrived_at => nil
                           ).joins("LEFT JOIN foods ON foods.id = orders.food_id LEFT JOIN restaurants ON restaurants.id = orders.restaurant_id")
     else
       @orders = Order.select("orders.*, restaurants.name AS rest_name, foods.name AS food_name")
@@ -29,11 +29,19 @@ class OrdersController < ApplicationController
   end
 
   def index_restaurants
-    if params[:filter] == "ongoing"
+    if params[:filter] == "pending-confirmed"
       @orders = Order.select("orders.*, foods.name AS food_name")
                           .where(:restaurant_id => @current_restaurant.id,
-                            :arrived_at => nil
-                          ).joins("LEFT JOIN foods ON foods.id = orders.food_id")
+                            :confirmed_at => nil
+                          )
+                          .joins("LEFT JOIN foods ON foods.id = orders.food_id")
+    elsif params[:filter] == "preparing"
+      @orders = Order.select("orders.*, foods.name AS food_name")
+                          .where(:restaurant_id => @current_restaurant.id,
+                            :ready => false
+                          )
+                          .where.not(:confirmed_at => nil)
+                          .joins("LEFT JOIN foods ON foods.id = orders.food_id")
     else
       @orders = Order.select("orders.*, foods.name AS food_name")
                           .where(:restaurant_id => @current_restaurant.id)
@@ -72,6 +80,12 @@ class OrdersController < ApplicationController
     @order.update(paid: 1)
 
     render html: "<script>\nalert('Successfully pay the order.');\nwindow.location = '/customers/order';\n</script>".html_safe and return;
+  end
+
+  def confirmed
+    @order.update(confirmed_at: DateTime.now)
+
+    render html: "<script>\nalert('Successfully confirmed the order. Please prepare food.');\nwindow.location = '/restaurants/order';\n</script>".html_safe and return;
   end
 
   # GET /orders/1/edit

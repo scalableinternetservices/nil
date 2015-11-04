@@ -1,0 +1,78 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="page-header"></h2>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+                <div class="panel-heading">
+                  Order Information
+                </div>
+                <!-- Tab panes -->
+                <div class="panel-body">
+                    <div class="tab-pane fade in active" id="home-pills">
+                        <form role="form" method="post">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label>Order ID</label>
+                                    <%= @order.id %>
+                                </div>
+                                <div class="form-group">
+                                    <label>Restaurant</label>
+                                    <%= @restaurant.name %>
+                                </div>
+                                <div class="form-group">
+                                    <label>Food Name</label>
+                                    <%= @food.name %>
+                                </div>
+                                <div class="form-group">
+                                    <label>Price</label>
+                                    <%= @order.price %>
+                                </div>
+                                <div class="form-group">
+                                    <label>Status</label>
+                                    <%=
+                                      if @order.arrived
+                                        "Arrived at #{@order.arrived_at}"
+                                      elsif @order.shipped_at != nil
+                                        "Shipped at #{order.shipped_at}"
+                                      elsif @order.confirmed_at != nil
+                                        "Confirmed at #{@order.confirmed_at}"
+                                      elsif @order.paid
+                                        "Pending Confirm"
+                                      else
+                                        "Unpaid"
+                                      end
+                                    %>
+                                </div>
+                                <div class="form-group">
+                                    <label>Address</label>
+                                    <%= @order.address %>
+                                </div>
+                                <div class="form-group">
+                                    <label>ZipCode</label>
+                                    <%= @order.zip %>
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone</label>
+                                    <%= @order.phone %>
+                                </div>
+
+                                <% if not @order.paid %><a class="btn btn-info" href="/orders/pay/<%= @order.id %>">Pay Bill</a><% end %>
+                                <a class="btn btn-info" href="/restaurants/order">Return</a>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-6 -->
+</div>
+<!-- /.row -->
