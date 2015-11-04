@@ -1,6 +1,6 @@
 class OrdersController < ApplicationController
   before_action :set_order, only: [:show, :edit, :update, :destroy]
-  before_action :set_order_customers, only: [:show_customers]
+  before_action :set_order_customers, only: [:show_customers, :pay]
   before_action :check_access_customer, only: [:index_customers, :show_customers, :new]
 
   # GET /orders
@@ -14,7 +14,13 @@ class OrdersController < ApplicationController
   end
 
   def index_customers
-    @orders = Order.where(:user_id => current_user.id)
+    if params[:filter] == "ongoing"
+      @orders = Order.where(:user_id => current_user.id,
+                            :arrived_at => nil
+                            ).joins("LEFT JOIN foods ON foods.id = orders.food_id")
+    else
+      @orders = Order.where(:user_id => current_user.id)
+    end
   end
 
   def show_customers
@@ -38,9 +44,15 @@ class OrdersController < ApplicationController
     @order = Order.new
   end
 
-  # GET /orders/1/edit
-  def edit
+  def pay
+    @order.update(paid: 1)
+
+    render html: "<script>\nalert('Successfully pay the order.');\nwindow.location = '/customers/order';\n</script>".html_safe and return;
   end
+
+  # GET /orders/1/edit
+  #def edit
+  #end
 
   # POST /orders
   # POST /orders.json
