@@ -11,53 +11,60 @@ class OrdersController < ApplicationController
     #@orders = Order.all
     if (current_user.role.downcase == "customer")
       redirect_to "/customers/order"
+    elsif current_user.role == 'shipper'
+        @orders = Order.includes(:restaurant).where(assigned: false).where.not(confirmed_at: nil)
     end
-    render html: ""
   end
 
   def index_customers
     if params[:filter] == "ongoing"
-      @orders = Order.select("orders.*, restaurants.name AS rest_name, foods.name AS food_name")
+      @orders = Order.select("orders.*, restaurants.name AS rest_name")
                           .where(:user_id => current_user.id,
                             :arrived_at => nil
-                          ).joins("LEFT JOIN foods ON foods.id = orders.food_id LEFT JOIN restaurants ON restaurants.id = orders.restaurant_id")
+                          ).joins("LEFT JOIN restaurants ON restaurants.id = orders.restaurant_id")
     else
-      @orders = Order.select("orders.*, restaurants.name AS rest_name, foods.name AS food_name")
+      @orders = Order.select("orders.*, restaurants.name AS rest_name")
                           .where(:user_id => current_user.id
-                          ).joins("LEFT JOIN foods ON foods.id = orders.food_id LEFT JOIN restaurants ON restaurants.id = orders.restaurant_id")
+                          ).joins("LEFT JOIN restaurants ON restaurants.id = orders.restaurant_id")
     end
   end
 
   def index_restaurants
     if params[:filter] == "pending-confirmed"
-      @orders = Order.select("orders.*, foods.name AS food_name")
+      @orders = Order.select("orders.*, customers.name AS user_name")
                           .where(:restaurant_id => @current_restaurant.id,
                             :confirmed_at => nil
                           )
-                          .joins("LEFT JOIN foods ON foods.id = orders.food_id")
+                          .joins("LEFT JOIN customers ON customers.user_id = orders.user_id")
     elsif params[:filter] == "preparing"
-      @orders = Order.select("orders.*, foods.name AS food_name")
+      @orders = Order.select("orders.*, customers.name AS user_name")
                           .where(:restaurant_id => @current_restaurant.id,
                             :ready => false
                           )
                           .where.not(:confirmed_at => nil)
-                          .joins("LEFT JOIN foods ON foods.id = orders.food_id")
+                          .joins("LEFT JOIN customers ON customers.user_id = orders.user_id")
     else
-      @orders = Order.select("orders.*, foods.name AS food_name")
+      @orders = Order.select("orders.*, customers.name AS user_name")
                           .where(:restaurant_id => @current_restaurant.id)
-                          .joins("LEFT JOIN foods ON foods.id = orders.food_id")
+                          .joins("LEFT JOIN customers ON customers.user_id = orders.user_id")
     end
   end
 
   def show_customers
     # @food = Food.where(:id => @order.food_id)
     @restaurant = Restaurant.find(@order.restaurant_id)
-    @food = Food.find(@order.food_id)
+    @food_list = ActiveSupport::JSON.decode(@order.food_json)
+    @food_list.each do |item|
+      item["name"] = Food.find(item["id"]).name
+    end
   end
 
   def show_restaurants
     @restaurant = Restaurant.find(@order.restaurant_id)
-    @food = Food.find(@order.food_id)
+    @food_list = ActiveSupport::JSON.decode(@order.food_json)
+    @food_list.each do |item|
+      item["name"] = Food.find(item["id"]).name
+    end
   end
 
   # GET /orders/1
@@ -84,6 +91,10 @@ class OrdersController < ApplicationController
         @restaurant = Restaurant.find(item["food"].restaurant_id)
       end
     end
+
+    if @restaurant == nil
+      render html: "Empty Purchase Cart".html_safe and return
+    end
     
     @customer = Customer.find_by(user_id: current_user.id)
     @order = Order.new
@@ -94,7 +105,7 @@ class OrdersController < ApplicationController
     @food = Food.find(params[:id])
 
     if session[:cart] == nil or session[:cart] == ""
-      session[:cart] = ActiveSupport::JSON.encode({})
+      session[:cart] = ActiveSupport::JSON.encode(Array.new())
     end
 
     cart = ActiveSupport::JSON.decode(session[:cart])
@@ -108,12 +119,12 @@ class OrdersController < ApplicationController
     end
 
     if not isFound
-      cart << {food_id: params[:id], count: 1}
+      cart.push({food_id: params[:id], count: 1})
     end
 
     session[:cart] = ActiveSupport::JSON.encode(cart)
 
-    render html: "Done" and return
+    redirect_to '/orders/new'
   end
 
   def pay
@@ -134,6 +145,22 @@ class OrdersController < ApplicationController
     render html: "<script>\nalert('Order is marked as ready.');\nwindow.location = '/restaurants/order';\n</script>".html_safe and return;
   end
 
+  def take
+    unless current_user.role == 'shipper'
+      render :file => 'public/404.html', :status => :not_found, :layout => false and return
+    end
+
+    @order = Order.find(params[:id])
+    @order.assigned = true
+    @order.shipper_id = Shipper.find_by_user_id(current_user.id).id
+    if @order.save
+      flash[:notice] = 'Order taken!'
+    else
+      flash[:notice] = 'Failed to take the order!'
+    end
+    redirect_to orders_path
+  end
+
   # GET /orders/1/edit
   #def edit
   #end
@@ -142,10 +169,38 @@ class OrdersController < ApplicationController
   # POST /orders.json
   def create
     @order = Order.new(order_params)
-    @food = Food.find(params[:food_id])
-    @order.food_id = params[:food_id]
+
+    if session[:cart] == nil and session[:cart] == ""
+      render html: "Empty Purchase Cart".html_safe and return
+    end
+
+    @order.price = 0
+    @food = nil
+    cart = ActiveSupport::JSON.decode(session[:cart])
+    count = 0
+    food_json = Array.new()
+
+    cart.each do |item|
+      food = Food.find(item["food_id"])
+      @order.price += food.price * params["food_count_" + item["food_id"]].to_i
+
+      if params["food_count_" + item["food_id"]].to_i > 0
+        tmp_count = params["food_count_" + item["food_id"]].to_i
+        count = count + tmp_count
+        food_json.push({id: item["food_id"], count: tmp_count, price: food.price * tmp_count})
+      end
+
+      if @food == nil
+        @food = Food.find(item["food_id"])
+      end
+    end
+
+    if @food == nil or count == 0
+      render html: "Empty Purchase Cart".html_safe and return
+    end
+
+    @order.food_json = ActiveSupport::JSON.encode(food_json)
     @order.user_id = current_user.id
-    @order.price = @food.price
     @order.restaurant_id = @food.restaurant_id
     @order.paid = 0
     @order.ready = 0
@@ -154,6 +209,8 @@ class OrdersController < ApplicationController
 
     respond_to do |format|
       if @order.save
+        session[:cart] = ""
+
         format.html { redirect_to @order, notice: 'Order was successfully created.' }
         format.json { render :show, status: :created, location: @order }
       else
@@ -211,6 +268,8 @@ class OrdersController < ApplicationController
 
     def set_order_restaurants
       @order = Order.find(params[:id])
+                    #.where("orders.*, customers.name AS user_name")
+                    #.joins("LEFT JOIN customers ON customers.user_id = orders.user_id")
 
       if @order.restaurant_id != @current_restaurant.id
         render html: "Access denied. Not your order.".html_safe and return
@@ -220,7 +279,7 @@ class OrdersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_params
       #params.require(:order).permit(:price, :paid, :ready, :assigned, :arrived, :address, :zip, :phone, :shipped_at, :arrived_at, :confirmed_at, :restaurant_id, :customer_id)
-      params.require(:order).permit(:food_id, :address, :zip, :phone)
+      params.require(:order).permit(:address, :zip, :phone)
     end
 
     def check_access_customer
