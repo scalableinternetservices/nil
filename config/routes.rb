@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get 'restaurants/menu' => 'restaurants#show_food'
   get 'restaurants/:id' => 'foods#index'
   get 'restaurants/show' => 'restaurants#show'
+  get 'search' => 'customers#search'
   #get '/restaurant/:restaurant_id/:id' => 'foods#show'
   resources :restaurants do
     resources :foods

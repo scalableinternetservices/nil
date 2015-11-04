@@ -52,7 +52,10 @@ class CustomersController < ApplicationController
       end
     end
   end
-
+  def search
+    @restaurants = Restaurant.where("name LIKE ?","%#{params[:keyword]}%")
+    @foods = Food.where("name LIKE ?", "%#{params[:keyword]}%")
+  end
   # DELETE /customers/1
   # DELETE /customers/1.json
   def destroy
