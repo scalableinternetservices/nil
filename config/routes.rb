@@ -1,14 +1,16 @@
 Rails.application.routes.draw do
   resources :orders
-  get 'restaurants/setting' => 'restaurants#edit'
-  get 'customers/setting'   => 'customers#edit'
-  get 'customers/order'     => 'orders#index_customers'
-  get 'customers/order/:id' => 'orders#show_customers'
-  get 'orders/new/:id'      => 'orders#new'
-  get 'orders/pay/:id'      => 'orders#pay'
-  get 'restaurants/menu' => 'restaurants#show_food'
-  get 'restaurants/:id' => 'foods#index'
-  get 'restaurants/show' => 'restaurants#show'
+  get 'restaurants/setting'   => 'restaurants#edit'
+  get 'customers/setting'     => 'customers#edit'
+  get 'customers/order'       => 'orders#index_customers'
+  get 'customers/order/:id'   => 'orders#show_customers'
+  get 'orders/new/:id'        => 'orders#new'
+  get 'orders/pay/:id'        => 'orders#pay'
+  get 'restaurants/menu'      => 'restaurants#show_food'
+  get 'restaurants/order'     => 'orders#index_restaurants'
+  get 'restaurants/order/:id' => 'orders#show_restaurants'
+  get 'restaurants/:id'       => 'foods#index'
+  get 'restaurants/show'      => 'restaurants#show'
   #get '/restaurant/:restaurant_id/:id' => 'foods#show'
   resources :restaurants do
     resources :foods
