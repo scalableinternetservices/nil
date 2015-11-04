@@ -1,9 +1,9 @@
 class OrdersController < ApplicationController
   before_action :check_access_customer, only: [:index_customers, :show_customers, :new, :pay]
   before_action :set_order, only: [:show, :edit, :update, :destroy]
-  before_action :set_restaurants, only: [:index_restaurants, :show_restaurants, :confirmed]
+  before_action :set_restaurants, only: [:index_restaurants, :show_restaurants, :confirmed, :ready]
   before_action :set_order_customers, only: [:show_customers, :pay]
-  before_action :set_order_restaurants, only: [:show_restaurants, :confirmed]
+  before_action :set_order_restaurants, only: [:show_restaurants, :confirmed, :ready]
 
   # GET /orders
   # GET /orders.json
@@ -86,6 +86,12 @@ class OrdersController < ApplicationController
     @order.update(confirmed_at: DateTime.now)
 
     render html: "<script>\nalert('Successfully confirmed the order. Please prepare food.');\nwindow.location = '/restaurants/order';\n</script>".html_safe and return;
+  end
+
+  def ready
+    @order.update(ready: 1)
+
+    render html: "<script>\nalert('Order is marked as ready.');\nwindow.location = '/restaurants/order';\n</script>".html_safe and return;
   end
 
   # GET /orders/1/edit

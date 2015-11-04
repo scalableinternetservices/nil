@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   get 'orders/new/:id'        => 'orders#new'
   get 'orders/pay/:id'        => 'orders#pay'
   get 'orders/confirmed/:id'  => 'orders#confirmed'
+  get 'orders/ready/:id'      => 'orders#ready'
   get 'restaurants/menu'      => 'restaurants#show_food'
   get 'restaurants/order'     => 'orders#index_restaurants'
   get 'restaurants/order/:id' => 'orders#show_restaurants'

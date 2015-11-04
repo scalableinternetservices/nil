@@ -38,6 +38,8 @@
                         <td>
                         <% if order.confirmed_at == nil %>
                             <a class="btn btn-info" href="/orders/confirmed/<%= order.id %>">Confirmed</a>
+                        <% elsif not order.ready %>
+                            <a class="btn btn-info" href="/orders/ready/<%= order.id %>">Ready Pickup</a>
                         <% end %>
                             <a class="btn btn-info" href="/restaurants/order/<%= order.id %>">View</a>
                         </td>
