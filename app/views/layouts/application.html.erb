@@ -144,7 +144,20 @@
                             <a href="/restaurants/"><i class="fa fa-table fa-fw"></i> Restaurants</a>
                         </li>
                         <% end %>
-
+                        <% if current_user.role.downcase == "restaurant" %>
+                        <li>
+                            <a href="#"><i class="fa fa-table fa-fw"></i> Orders<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="/restaurants/order?filter=pending-confirmed">Pending Confirmed</a>
+                                </li>
+                                <li>
+                                    <a href="/restaurants/order">All Orders</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <% end %>
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->
