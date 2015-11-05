@@ -1,6 +1,7 @@
 class ShippersController < ApplicationController
   before_action :set_shipper, only: [:show, :edit, :update, :destroy, :showOrders]
   before_action :check_access
+  
 
   # GET /shippers
   # GET /shippers.json
