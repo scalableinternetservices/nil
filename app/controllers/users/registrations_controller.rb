@@ -18,6 +18,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
           Customer.create(user_id: current_user.id)
         when 'restaurant'
           Restaurant.create(user_id: current_user.id)
+        when 'shipper'
+          Shipper.create(user_id: current_user.id)
         else
           
       end
