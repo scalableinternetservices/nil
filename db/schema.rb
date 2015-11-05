@@ -11,7 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151030193811) do
+ActiveRecord::Schema.define(version: 20151105202849) do
+
+  create_table "comments", force: :cascade do |t|
+    t.text     "message",       limit: 65535
+    t.integer  "restaurant_id", limit: 4
+    t.integer  "customer_id",   limit: 4
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.integer  "rating",        limit: 4
+  end
+
+  add_index "comments", ["customer_id"], name: "index_comments_on_customer_id", using: :btree
+  add_index "comments", ["restaurant_id"], name: "index_comments_on_restaurant_id", using: :btree
 
   create_table "customers", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -74,6 +86,17 @@ ActiveRecord::Schema.define(version: 20151030193811) do
 
   add_index "restaurants", ["user_id"], name: "index_restaurants_on_user_id", using: :btree
 
+  create_table "shippers", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.text     "address",    limit: 65535
+    t.string   "zip",        limit: 255
+    t.integer  "user_id",    limit: 4
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "shippers", ["user_id"], name: "index_shippers_on_user_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                  limit: 255, default: "", null: false
     t.string   "encrypted_password",     limit: 255, default: "", null: false
@@ -93,10 +116,13 @@ ActiveRecord::Schema.define(version: 20151030193811) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "comments", "customers"
+  add_foreign_key "comments", "restaurants"
   add_foreign_key "customers", "users"
   add_foreign_key "foods", "restaurants"
   add_foreign_key "orders", "foods"
   add_foreign_key "orders", "restaurants"
   add_foreign_key "orders", "users"
   add_foreign_key "restaurants", "users"
+  add_foreign_key "shippers", "users"
 end
