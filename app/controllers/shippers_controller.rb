@@ -1,5 +1,6 @@
 class ShippersController < ApplicationController
-  before_action :set_shipper, only: [:show, :edit, :update, :destroy]
+  before_action :set_shipper, only: [:show, :edit, :update, :destroy, :showOrders]
+  before_action :check_access
 
   # GET /shippers
   # GET /shippers.json
@@ -61,14 +62,25 @@ class ShippersController < ApplicationController
     end
   end
 
+  def showOrders
+    @orders = Order.includes(:shipper).where(shippers: {user_id: current_user.id}).includes(:restaurant)
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_shipper
-      @shipper = Shipper.find(params[:id])
+      # @shipper = Shipper.find(params[:id])
+      @shipper = Shipper.find_by_user_id current_user.id
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def shipper_params
       params.require(:shipper).permit(:name, :address, :zip, :user_id, :phone)
+    end
+
+    def check_access
+      if current_user.role != 'shipper'
+        render html: 'Access denied.'.html_safe and return
+      end
     end
 end

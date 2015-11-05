@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151105000515) do
+
+ActiveRecord::Schema.define(version: 20151105202849) do
 
   create_table "comments", force: :cascade do |t|
     t.text     "message",       limit: 65535
@@ -86,6 +87,17 @@ ActiveRecord::Schema.define(version: 20151105000515) do
 
   add_index "restaurants", ["user_id"], name: "index_restaurants_on_user_id", using: :btree
 
+  create_table "shippers", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.text     "address",    limit: 65535
+    t.string   "zip",        limit: 255
+    t.integer  "user_id",    limit: 4
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "shippers", ["user_id"], name: "index_shippers_on_user_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                  limit: 255, default: "", null: false
     t.string   "encrypted_password",     limit: 255, default: "", null: false
@@ -113,4 +125,5 @@ ActiveRecord::Schema.define(version: 20151105000515) do
   add_foreign_key "orders", "restaurants"
   add_foreign_key "orders", "users"
   add_foreign_key "restaurants", "users"
+  add_foreign_key "shippers", "users"
 end
