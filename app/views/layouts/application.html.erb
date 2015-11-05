@@ -113,17 +113,13 @@
                     <ul class="nav" id="side-menu">
                         <li class="sidebar-search">
                             <div classs="input-group custom-search-form">
-                                <!--<form action="/search" method="get">-->
-                                <!--    <input type="text" name = "keyword" class="form-control" placeholder="Search...">-->
-                                <!--    <span class="input-group-btn">-->
-                                <!--        <input name = "commit" class="btn btn-default" type="submit" value="Search" >-->
-                                <!--            <i class="fa fa-search"></i>-->
-                                <!--        </input>-->
-                                <!--    </span>-->
-                                <!--</form>-->
                                 <%= form_tag("/search", method: "get") do %>
-                                  <%= text_field_tag(:keyword) %>
-                                  <%= submit_tag("Search") %>
+                                  <%= text_field_tag :search, params[:search], placeholder: "Restaurant/Food", class: "form-control" %>
+                                    <span class="input-group-btn">
+                                        <%= button_tag type: 'submit', :name => "commit", class: "btn btn-default" do%>
+                                            <i class="fa fa-search"></i>
+                                        <% end %>
+                                    </span>
                                 <% end %>
                             </div>
                             <!-- /input-group -->

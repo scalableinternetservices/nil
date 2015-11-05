@@ -8,7 +8,6 @@ Rails.application.routes.draw do
   get 'restaurants/menu' => 'restaurants#show_food'
   get 'restaurants/:id' => 'foods#index'
   get 'restaurants/show' => 'restaurants#show'
-  get 'search' => 'customers#search'
   #get '/restaurant/:restaurant_id/:id' => 'foods#show'
   resources :restaurants do
     resources :foods
@@ -18,7 +17,7 @@ Rails.application.routes.draw do
   devise_scope :user do
     root "users/sessions#new"
   end
-  
+  get 'search' => 'searches#search'
  # resources :foods, only: [:index, :show]
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -1,0 +1,36 @@
+<p id="notice"><%= notice %></p>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <b> Search Result </b>
+    </div>
+    <!-- /.panel-heading -->
+    <div class="panel-body">
+        <% if @restaurants.length != 0 %>
+        <h4>Restaurants found:</h4>
+        <div class="list-group">
+                <% @restaurants.each do |restaurant| %>
+                    <a href = <%= restaurant_foods_url(restaurant) %> class = "list-group-item" target="_blank">
+                        <b><%= restaurant.name %></b>
+                        <div class="pull-right"><%= restaurant.address %> </div>
+                    </a>
+                <% end %>
+        </div>
+        <<% else %>
+            <h4>No restaurant found.</h4>
+        <% end %>
+        <% if @foods.length != 0 %>
+            <h4>Foods found:</h4>
+            <div class="list-group">
+                <% @foods.each do |food| %>
+                    <a href = <%= restaurant_food_url(food.restaurant,food) %> class = "list-group-item" target="_blank">
+                        <b><%= food.name %></b>
+                        <div class="pull-right"><%= food.restaurant.name %> </div>
+                    </a>
+                <% end %>
+            </div>
+        <% else %>
+            <h4>No food found.</h4>
+        <% end %>
+    </div>
+    <!-- /.panel-body -->
+</div>
