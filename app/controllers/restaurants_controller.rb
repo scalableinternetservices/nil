@@ -1,5 +1,5 @@
 class RestaurantsController < ApplicationController
-  before_action :check_access
+  before_action :check_access, except: [:show, :index]
   before_action :set_restaurant, only: [:create_food,:show,:edit, :update, :destroy]
 
   # GET /restaurants

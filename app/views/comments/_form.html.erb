@@ -1,9 +1,11 @@
 <%= form_for([@restaurant, @comment]) do |f| %>
-  <div class="field">
+  <div class="form-group">
     <%= f.label :message %><br>
-    <%= f.text_area :message %>
+    <%= f.text_area :message, class: 'form-control' , style: "max-width:50%;", rows: "5" %>
   </div>
-  <div class="actions">
-    <%= f.submit %>
+    <div class="form-group">
+    <%= f.label :rating %><br>
+    <%= f.select :rating, 1..5, {}, class: 'form-control', style: "max-width:10%;"%>
   </div>
+  <%= f.submit "Submit comment", class: "btn btn-lg btn-success"%>
 <% end %>
