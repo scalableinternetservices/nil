@@ -5,8 +5,6 @@ Rails.application.routes.draw do
   get 'customers/order'     => 'orders#index_customers'
   get 'customers/order/:id' => 'orders#show_customers'
   get 'orders/new/:id'      => 'orders#new'
-  get 'restaurants/menu' => 'restaurants#show_food'
- # get 'restaurants/:restaurant_id' => 'foods#index'
   get 'restaurants/show' => 'restaurants#show'
   #get '/restaurant/:restaurant_id/:id' => 'foods#show'
   resources :restaurants do
