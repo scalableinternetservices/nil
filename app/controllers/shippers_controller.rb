@@ -42,7 +42,7 @@ class ShippersController < ApplicationController
   def update
     respond_to do |format|
       if @shipper.update(shipper_params)
-        format.html { redirect_to @shipper, notice: 'Shipper was successfully updated.' }
+        format.html { redirect_to edit_shipper_path(@shipper), notice: 'Shipper was successfully updated.' }
         format.json { render :show, status: :ok, location: @shipper }
       else
         format.html { render :edit }
@@ -69,6 +69,6 @@ class ShippersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def shipper_params
-      params.require(:shipper).permit(:name, :address, :zip, :user_id)
+      params.require(:shipper).permit(:name, :address, :zip, :user_id, :phone)
     end
 end
