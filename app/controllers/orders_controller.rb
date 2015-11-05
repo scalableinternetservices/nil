@@ -70,10 +70,50 @@ class OrdersController < ApplicationController
 
   # GET /orders/new
   def new
+    if session[:cart] == nil or session[:cart] == ""
+      session[:cart] = ActiveSupport::JSON.encode({})
+    end
+    
+    @cart = ActiveSupport::JSON.decode(session[:cart])
+    @restaurant = nil
+
+    @cart.each do |item|
+      item["food"] = Food.find(item["food_id"])
+
+      if @restaurant == nil
+        @restaurant = Restaurant.find(item["food"].restaurant_id)
+      end
+    end
+    
+    @customer = Customer.find_by(user_id: current_user.id)
+    @order = Order.new
+  end
+
+  def addtocart
     @customer = Customer.find_by(user_id: current_user.id)
     @food = Food.find(params[:id])
-    @restaurant = Restaurant.find(@food.restaurant_id)
-    @order = Order.new
+
+    if session[:cart] == nil or session[:cart] == ""
+      session[:cart] = ActiveSupport::JSON.encode({})
+    end
+
+    cart = ActiveSupport::JSON.decode(session[:cart])
+    
+    isFound = false
+    cart.each do |item|
+      if item["food_id"] == params[:id]
+        isFound = true
+        break
+      end
+    end
+
+    if not isFound
+      cart << {food_id: params[:id], count: 1}
+    end
+
+    session[:cart] = ActiveSupport::JSON.encode(cart)
+
+    render html: "Done" and return
   end
 
   def pay
