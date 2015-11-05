@@ -30,6 +30,11 @@
             <a href="/restaurants/setting">Restaurant</a>
           </li>
         <% end %>
+        <% if current_user.role.downcase == "shipper" %>
+          <li>
+            <%= link_to "Shipper", edit_shipper_path(Shipper.find_by(user_id: current_user.id)) %>
+          </li>
+        <% end %>
         </ul>
         <br/>
 
