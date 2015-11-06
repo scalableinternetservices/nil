@@ -1,15 +1,15 @@
 class FoodsController < ApplicationController
   before_action :check_restid, only: [:new, :edit, :update, :destroy]
-  before_action  only: [:show,:edit, :update, :destroy]
+
   def index
-    @self = Restaurant.find_by user_id: current_user.id 
-    if current_user.role == 'restaurant' && @self.id == params[:restaurant_id]
-        redirect_to restaurants_menu_path()
+    @restaurant = Restaurant.find(params[:restaurant_id])
+    if current_user.role.downcase == "restaurant" and @restaurant.user_id == current_user.id
+      redirect_to "/restaurants/menu"
     else
-      @restaurant = Restaurant.find(params[:restaurant_id])
       @foods = @restaurant.foods
     end
   end
+
   def index_restaurants
     @restaurant = Restaurant.find_by user_id: current_user.id
     @foods = @restaurant.foods
@@ -63,7 +63,7 @@ class FoodsController < ApplicationController
       
   end
   
-    private
+  private
     # Use callbacks to share common setup or constraints between actions.
     # def set_restaurant
     #   @restaurant = Restaurant.find_by(user_id: current_user.id)
@@ -85,6 +85,7 @@ class FoodsController < ApplicationController
           @food.update image: 'lays-classic.png'
         end
     end
+
     def check_restid
       @restaurant = Restaurant.find_by user_id: current_user.id
       if @restaurant.id != params[:restaurant_id].to_i
