@@ -1,5 +1,5 @@
 class RestaurantsController < ApplicationController
-  before_action :check_access
+  before_action :check_access, except: [:show, :index]
   before_action :set_restaurant, only: [:create_food,:show,:edit, :update, :destroy]
 
   # GET /restaurants
@@ -11,6 +11,9 @@ class RestaurantsController < ApplicationController
   # GET /restaurants/1
   # GET /restaurants/1.json
   def show
+    @restaurant = Restaurant.find(params[:id])
+    @foods = @restaurant.foods
+    @comments = @restaurant.comments
   end
 
   # GET /restaurants/new
@@ -79,4 +82,5 @@ class RestaurantsController < ApplicationController
         render html: "Access denied.".html_safe and return
       end
     end
+    
 end

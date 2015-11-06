@@ -5,12 +5,11 @@ Rails.application.routes.draw do
   get 'customers/order'     => 'orders#index_customers'
   get 'customers/order/:id' => 'orders#show_customers'
   get 'orders/new/:id'      => 'orders#new'
-  get 'restaurants/menu' => 'restaurants#show_food'
-  get 'restaurants/:id' => 'foods#index'
   get 'restaurants/show' => 'restaurants#show'
   #get '/restaurant/:restaurant_id/:id' => 'foods#show'
   resources :restaurants do
     resources :foods
+    resources :comments
   end
   resources :customers
   devise_for :users, controllers: {registrations: "users/registrations", sessions: "users/sessions"}

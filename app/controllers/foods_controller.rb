@@ -1,6 +1,6 @@
 class FoodsController < ApplicationController
+  before_action :check_restid, only: [:new, :edit, :update, :destroy]
   before_action  only: [:show,:edit, :update, :destroy]
-  
   def index
     @restaurant = Restaurant.find(params[:restaurant_id])
     @foods = @restaurant.foods
@@ -64,10 +64,9 @@ class FoodsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def food_params
-      params.require(:food).permit(:name, :price, :description, :restaurant_id)
+      params.require(:food).permit(:name, :price, :description, :restaurant_id,:num_left)
     end
     
-        
     def upload
         if uploaded_io = params[:food][:image]
           file_name = "#{@restaurant.id}_#{@food.id}.jpg"
@@ -79,5 +78,10 @@ class FoodsController < ApplicationController
           @food.update image: 'lays-classic.png'
         end
     end
-    
+    def check_restid
+      @restaurant = Restaurant.find_by user_id: current_user.id
+      if @restaurant.id != params[:restaurant_id].to_i
+         render html: "Access denied.".html_safe and return
+      end
+    end
 end
