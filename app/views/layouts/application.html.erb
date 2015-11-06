@@ -112,16 +112,16 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li class="sidebar-search">
-                            <div classs="input-group custom-search-form">
-                                <%= form_tag("/search", method: "get") do %>
-                                  <%= text_field_tag :search, params[:search], placeholder: "Restaurant/Food", class: "form-control" %>
+                            <form action="/search" method="get">
+                                <div class="input-group custom-search-form">
+                                    <input type="text" name="search" class="form-control" placeholder="Search...">
                                     <span class="input-group-btn">
-                                        <%= button_tag type: 'submit', :name => "commit", class: "btn btn-default" do%>
+                                        <button class="btn btn-default" type="submit">
                                             <i class="fa fa-search"></i>
-                                        <% end %>
+                                        </button>
                                     </span>
-                                <% end %>
-                            </div>
+                                </div>
+                            </form>
                             <!-- /input-group -->
                         </li>
                         <li>
