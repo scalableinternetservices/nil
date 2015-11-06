@@ -22,17 +22,17 @@
           </li>
         <% if current_user.role.downcase == "customer" %>
           <li>
-            <a href="/customers/setting">Customer</a>
+            <%= link_to 'Customer', '/customers/setting' %>
           </li>
         <% end %>
         <% if current_user.role.downcase == "restaurant" %>
           <li>
-            <a href="/restaurants/setting">Restaurant</a>
+            <%= link_to 'Restaurant', '/restaurants/setting' %>
           </li>
         <% end %>
-        <% if current_user.role.downcase == "shipper" %>
+        <% if current_user.role. == "shipper" %>
           <li>
-            <%= link_to "Shipper", edit_shipper_path(Shipper.find_by(user_id: current_user.id)) %>
+            <%= link_to 'Shipper', '/shippers/setting' %>
           </li>
         <% end %>
         </ul>
