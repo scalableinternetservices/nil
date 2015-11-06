@@ -12,7 +12,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 
-ActiveRecord::Schema.define(version: 20151106001550) do
+ActiveRecord::Schema.define(version: 20151106052401) do
 
   create_table "comments", force: :cascade do |t|
     t.text     "message",       limit: 65535
@@ -69,9 +69,11 @@ ActiveRecord::Schema.define(version: 20151106001550) do
     t.datetime "updated_at",                                          null: false
     t.integer  "user_id",       limit: 4
     t.text     "food_json",     limit: 65535
+    t.integer  "shipper_id",    limit: 4
   end
 
   add_index "orders", ["restaurant_id"], name: "index_orders_on_restaurant_id", using: :btree
+  add_index "orders", ["shipper_id"], name: "index_orders_on_shipper_id", using: :btree
   add_index "orders", ["user_id"], name: "index_orders_on_user_id", using: :btree
 
   create_table "restaurants", force: :cascade do |t|
@@ -122,6 +124,7 @@ ActiveRecord::Schema.define(version: 20151106001550) do
   add_foreign_key "customers", "users"
   add_foreign_key "foods", "restaurants"
   add_foreign_key "orders", "restaurants"
+  add_foreign_key "orders", "shippers"
   add_foreign_key "orders", "users"
   add_foreign_key "restaurants", "users"
   add_foreign_key "shippers", "users"
