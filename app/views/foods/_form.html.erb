@@ -2,11 +2,11 @@
 <fieldset>
   <div class="form-group">
     <%= f.label :name %><br>
-    <%= f.text_field :name, class: 'form-control' %>
+    <%= f.text_field :name, :required => true, class: 'form-control' %>
   </div>
   <div class="form-group">
     <%= f.label :price %><br>
-    <%= f.text_area :price, class: 'form-control', :value => number_with_precision(f.object.price) %>
+    <%= f.text_field :price, class: 'form-control', :required => true, :value => number_with_precision(f.object.price) %>
   </div>
   <div class="form-group">
     <%= f.label :description %><br>
@@ -18,10 +18,6 @@
   </div>
     <div class="form-group">
     <%= f.label :image %><br>
-     <%= f.file_field :image ,class: 'form-control'%>
-  </div>
-      <div class="form-group">
-    <%= f.label :rating %><br>
      <%= f.file_field :image ,class: 'form-control'%>
   </div>
   <button type="submit" class="btn btn-success">Save</button>

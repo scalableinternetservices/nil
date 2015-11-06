@@ -67,7 +67,6 @@ class FoodsController < ApplicationController
       params.require(:food).permit(:name, :price, :description, :restaurant_id,:num_left)
     end
     
-        
     def upload
         if uploaded_io = params[:food][:image]
           file_name = "#{@restaurant.id}_#{@food.id}.jpg"
