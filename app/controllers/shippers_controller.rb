@@ -1,5 +1,5 @@
 class ShippersController < ApplicationController
-  before_action :set_shipper, only: [:show, :edit, :update, :destroy]
+  before_action :set_shipper, only: [:show, :edit, :update, :destroy, :showOrders]
   before_action :check_access
 
   # GET /shippers
@@ -60,6 +60,10 @@ class ShippersController < ApplicationController
       format.html { redirect_to shippers_url, notice: 'Shipper was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def showOrders
+    @orders = Order.includes(:shipper).where(shippers: {user_id: current_user.id}).includes(:restaurant)
   end
 
   private

@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   get 'restaurants/order/:id' => 'orders#show_restaurants'
   get 'restaurants/:id'       => 'foods#index'
   get 'restaurants/show'      => 'restaurants#show'
+  get 'shippers/orders'       => 'shippers#showOrders'
   #get '/restaurant/:restaurant_id/:id' => 'foods#show'
 
   resources :shippers
