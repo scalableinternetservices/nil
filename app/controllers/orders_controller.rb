@@ -116,6 +116,11 @@ class OrdersController < ApplicationController
     
     isFound = false
     cart.each do |item|
+      # Require same restaurant
+      if Food.find(item["food_id"]).restaurant_id != @food.restaurant_id
+        render html: "<script>\nalert('Can NOT add a food from different restaurant into cart. Please checkout before shopping in another restaurant');\nwindow.location = '/orders/new';\n</script>".html_safe and return;
+      end
+
       if item["food_id"] == params[:id]
         isFound = true
         break
