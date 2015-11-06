@@ -17,47 +17,53 @@ class OrdersController < ApplicationController
 
   def index_customers
     if params[:filter] == "ongoing"
-      @orders = Order.select("orders.*, restaurants.name AS rest_name, foods.name AS food_name")
+      @orders = Order.select("orders.*, restaurants.name AS rest_name")
                           .where(:user_id => current_user.id,
                             :arrived_at => nil
-                          ).joins("LEFT JOIN foods ON foods.id = orders.food_id LEFT JOIN restaurants ON restaurants.id = orders.restaurant_id")
+                          ).joins("LEFT JOIN restaurants ON restaurants.id = orders.restaurant_id")
     else
-      @orders = Order.select("orders.*, restaurants.name AS rest_name, foods.name AS food_name")
+      @orders = Order.select("orders.*, restaurants.name AS rest_name")
                           .where(:user_id => current_user.id
-                          ).joins("LEFT JOIN foods ON foods.id = orders.food_id LEFT JOIN restaurants ON restaurants.id = orders.restaurant_id")
+                          ).joins("LEFT JOIN restaurants ON restaurants.id = orders.restaurant_id")
     end
   end
 
   def index_restaurants
     if params[:filter] == "pending-confirmed"
-      @orders = Order.select("orders.*, foods.name AS food_name")
+      @orders = Order.select("orders.*, customers.name AS user_name")
                           .where(:restaurant_id => @current_restaurant.id,
                             :confirmed_at => nil
                           )
-                          .joins("LEFT JOIN foods ON foods.id = orders.food_id")
+                          .joins("LEFT JOIN customers ON customers.user_id = orders.user_id")
     elsif params[:filter] == "preparing"
-      @orders = Order.select("orders.*, foods.name AS food_name")
+      @orders = Order.select("orders.*, customers.name AS user_name")
                           .where(:restaurant_id => @current_restaurant.id,
                             :ready => false
                           )
                           .where.not(:confirmed_at => nil)
-                          .joins("LEFT JOIN foods ON foods.id = orders.food_id")
+                          .joins("LEFT JOIN customers ON customers.user_id = orders.user_id")
     else
-      @orders = Order.select("orders.*, foods.name AS food_name")
+      @orders = Order.select("orders.*, customers.name AS user_name")
                           .where(:restaurant_id => @current_restaurant.id)
-                          .joins("LEFT JOIN foods ON foods.id = orders.food_id")
+                          .joins("LEFT JOIN customers ON customers.user_id = orders.user_id")
     end
   end
 
   def show_customers
     # @food = Food.where(:id => @order.food_id)
     @restaurant = Restaurant.find(@order.restaurant_id)
-    @food = Food.find(@order.food_id)
+    @food_list = ActiveSupport::JSON.decode(@order.food_json)
+    @food_list.each do |item|
+      item["name"] = Food.find(item["id"]).name
+    end
   end
 
   def show_restaurants
     @restaurant = Restaurant.find(@order.restaurant_id)
-    @food = Food.find(@order.food_id)
+    @food_list = ActiveSupport::JSON.decode(@order.food_json)
+    @food_list.each do |item|
+      item["name"] = Food.find(item["id"]).name
+    end
   end
 
   # GET /orders/1
@@ -187,7 +193,7 @@ class OrdersController < ApplicationController
     respond_to do |format|
       if @order.save
         session[:cart] = ""
-        
+
         format.html { redirect_to @order, notice: 'Order was successfully created.' }
         format.json { render :show, status: :created, location: @order }
       else
@@ -245,6 +251,8 @@ class OrdersController < ApplicationController
 
     def set_order_restaurants
       @order = Order.find(params[:id])
+                    #.where("orders.*, customers.name AS user_name")
+                    #.joins("LEFT JOIN customers ON customers.user_id = orders.user_id")
 
       if @order.restaurant_id != @current_restaurant.id
         render html: "Access denied. Not your order.".html_safe and return

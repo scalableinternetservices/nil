@@ -10,7 +10,7 @@
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Food</th>
+                        <th>Customer</th>
                         <th>Price</th>
                         <th>Status</th>
                         <th>Option</th>
@@ -20,7 +20,7 @@
                     <% @orders.each do |order| %>
                     <tr class="odd gradeX">
                         <td><%= order.id %></td>
-                        <td><%= order.food_name %></td>
+                        <td><%= order.user_name %></td>
                         <td><%= order.price %></td>
                         <td><%=
                         if order.arrived
