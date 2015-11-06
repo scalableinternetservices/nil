@@ -11,8 +11,9 @@ class OrdersController < ApplicationController
     #@orders = Order.all
     if (current_user.role.downcase == "customer")
       redirect_to "/customers/order"
+    elsif current_user.role == 'shipper'
+      @orders = Order.includes(:restaurant).where(assigned: false).where.not(confirmed_at: nil)
     end
-    render html: ""
   end
 
   def index_customers
