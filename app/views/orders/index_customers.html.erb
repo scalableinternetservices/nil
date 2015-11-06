@@ -1,4 +1,4 @@
-<p id="notice"><%= notice %></p>
+<br/>
 <div class="panel panel-default">
     <div class="panel-heading">
         <b>My Orders</b>
@@ -11,8 +11,8 @@
                     <tr>
                         <th>Id</th>
                         <th>Restaurant</th>
-                        <th>Food</th>
                         <th>Price</th>
+                        <th>Order Time</th>
                         <th>Status</th>
                         <th>Option</th>
                     </tr>
@@ -22,8 +22,8 @@
                     <tr class="odd gradeX">
                         <td><%= order.id %></td>
                         <td><%= order.rest_name %></td>
-                        <td><%= order.food_name %></td>
                         <td><%= order.price %></td>
+                        <td><%= order.created_at %></td>
                         <td><%=
                         if order.arrived
                           "Arrived at #{order.arrived_at}"
