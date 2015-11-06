@@ -1,4 +1,4 @@
-<p id="notice"><%= notice %></p>
+<br/>
 <div class="panel panel-default">
     <div class="panel-heading">
         <b> <%= @restaurant.name %> 's Menu</b>
@@ -18,7 +18,7 @@
                         <span class = "pull-right"><%= truncate(strip_tags(food.description), length: 80) %></span>
                     </div>
                     <div class="panel-footer">
-                        <a class="btn btn-success" href="/orders/new/<%= food.id %>">Order</a>
+                        <a class="btn btn-success" href="/orders/addtocart/<%= food.id %>">Order</a>
                         <span class = "pull-right">Available Number: <%= food.num_left %>/<%= food.num_left + food.num_sold %></span>
                     </div>
                 </div>
