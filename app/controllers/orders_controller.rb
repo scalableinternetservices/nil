@@ -112,6 +112,10 @@ class OrdersController < ApplicationController
       session[:cart] = ActiveSupport::JSON.encode(Array.new())
     end
 
+    if (@food.num_left < 1)
+      render html: "<script>\nalert('This item is sold out.');\nhistory.back();\n</script>".html_safe and return;
+    end
+
     cart = ActiveSupport::JSON.decode(session[:cart])
     
     isFound = false
@@ -201,6 +205,12 @@ class OrdersController < ApplicationController
 
       if params["food_count_" + item["food_id"]].to_i > 0
         tmp_count = params["food_count_" + item["food_id"]].to_i
+
+        # Check avaiable
+        if food.num_left < tmp_count
+          render html: "<script>\nalert('Over sell. #{food.name} only lefts #{food.num_left} items.');\nhistory.back();\n</script>".html_safe and return;
+        end
+
         count = count + tmp_count
         food_json.push({id: item["food_id"], count: tmp_count, price: food.price * tmp_count})
       end
@@ -211,7 +221,14 @@ class OrdersController < ApplicationController
     end
 
     if @food == nil or count == 0
-      render html: "Empty Purchase Cart".html_safe and return
+      render html: "Nothing ordered".html_safe and return
+    end
+
+    # reduce num_left
+    food_json.each do |item|
+      food = Food.find(item[:id])
+      food.update(num_left: food.num_left - item[:count])
+      food.update(num_sold: food.num_sold + item[:count])
     end
 
     @order.food_json = ActiveSupport::JSON.encode(food_json)
