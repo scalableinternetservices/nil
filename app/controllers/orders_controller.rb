@@ -33,19 +33,23 @@ class OrdersController < ApplicationController
     if params[:filter] == "pending-confirmed"
       @orders = Order.select("orders.*, customers.name AS user_name")
                           .where(:restaurant_id => @current_restaurant.id,
-                            :confirmed_at => nil
+                            :confirmed_at => nil,
+                            :paid => true
                           )
                           .joins("LEFT JOIN customers ON customers.user_id = orders.user_id")
     elsif params[:filter] == "preparing"
       @orders = Order.select("orders.*, customers.name AS user_name")
                           .where(:restaurant_id => @current_restaurant.id,
-                            :ready => false
+                            :ready => false,
+                            :paid => true
                           )
                           .where.not(:confirmed_at => nil)
                           .joins("LEFT JOIN customers ON customers.user_id = orders.user_id")
     else
       @orders = Order.select("orders.*, customers.name AS user_name")
-                          .where(:restaurant_id => @current_restaurant.id)
+                          .where(:restaurant_id => @current_restaurant.id,
+                            :paid => true
+                          )
                           .joins("LEFT JOIN customers ON customers.user_id = orders.user_id")
     end
   end
