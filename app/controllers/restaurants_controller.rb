@@ -82,4 +82,5 @@ class RestaurantsController < ApplicationController
         render html: "Access denied.".html_safe and return
       end
     end
+    
 end
