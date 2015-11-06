@@ -2,11 +2,18 @@ class FoodsController < ApplicationController
   before_action :check_restid, only: [:new, :edit, :update, :destroy]
   before_action  only: [:show,:edit, :update, :destroy]
   def index
-    @restaurant = Restaurant.find(params[:restaurant_id])
-    @foods = @restaurant.foods
-
+    @self = Restaurant.find_by user_id: current_user.id 
+    if current_user.role == 'restaurant' && @self.id == params[:restaurant_id]
+        redirect_to restaurants_menu_path()
+    else
+      @restaurant = Restaurant.find(params[:restaurant_id])
+      @foods = @restaurant.foods
+    end
   end
-  
+  def index_restaurants
+    @restaurant = Restaurant.find_by user_id: current_user.id
+    @foods = @restaurant.foods
+  end
   def new
     @food = Food.new
     @restaurant = Restaurant.find_by user_id: current_user.id
@@ -18,7 +25,7 @@ class FoodsController < ApplicationController
       upload
       if @food.save
         # flash[:success] = "Successfully add your new food!"
-        redirect_to restaurant_foods_path(@restaurant)
+        redirect_to restaurants_menu_path()
       else
         render :new
       end
@@ -39,7 +46,7 @@ class FoodsController < ApplicationController
     @food = @restaurant.foods.find(params[:id])
     upload
     if @food.update(food_params)
-      redirect_to restaurant_foods_path(@restaurant)
+      redirect_to restaurants_menu_path()
     else
       render :edit
     end
@@ -49,7 +56,7 @@ class FoodsController < ApplicationController
       @restaurant = Restaurant.find_by user_id: current_user.id
       @food = @restaurant.foods.find(params[:id])
     if @food.destroy
-      redirect_to restaurant_foods_path(@restaurant)
+      redirect_to restaurants_menu_path()
     else
       render @restaurant
     end

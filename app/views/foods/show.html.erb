@@ -32,10 +32,12 @@
                 <label>Discription:</label>
                 <%= @food.description %>
               </div>
-              <% if current_user.role == "restaurant" %>
-              <button class="btn btn-edit"><%= link_to 'Edit', edit_restaurant_food_path() %></button>
+              <% if current_user.role == "restaurant" && @restaurant == @food.restaurant%>
+              <%= link_to 'Edit', edit_restaurant_food_path(), class:"btn btn-success" %>
+              <%= link_to 'Back', restaurants_menu_path(), class: "btn btn-info" %>
+              <% else %>
+              <%= link_to 'Back', restaurant_foods_url(@restaurant), class: "btn btn-info" %>
               <% end %>
-              <button class="btn btn-basic"><%= link_to 'Back', restaurant_foods_url(@restaurant) %></button>
             </fieldset>
           </form>
         </div>
