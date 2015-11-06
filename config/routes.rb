@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   get 'customers/setting'     => 'customers#edit'
   get 'customers/order'       => 'orders#index_customers'
   get 'customers/order/:id'   => 'orders#show_customers'
-  get 'orders/new/:id'        => 'orders#new'
+  get 'orders/new'            => 'orders#new'
   get 'orders/addtocart/:id'  => 'orders#addtocart'
   get 'orders/pay/:id'        => 'orders#pay'
   get 'orders/confirmed/:id'  => 'orders#confirmed'

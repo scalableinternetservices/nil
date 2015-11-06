@@ -84,6 +84,10 @@ class OrdersController < ApplicationController
         @restaurant = Restaurant.find(item["food"].restaurant_id)
       end
     end
+
+    if @restaurant == nil
+      render html: "Empty Purchase Cart".html_safe and return
+    end
     
     @customer = Customer.find_by(user_id: current_user.id)
     @order = Order.new
@@ -94,7 +98,7 @@ class OrdersController < ApplicationController
     @food = Food.find(params[:id])
 
     if session[:cart] == nil or session[:cart] == ""
-      session[:cart] = ActiveSupport::JSON.encode({})
+      session[:cart] = ActiveSupport::JSON.encode(Array.new())
     end
 
     cart = ActiveSupport::JSON.decode(session[:cart])
@@ -108,12 +112,12 @@ class OrdersController < ApplicationController
     end
 
     if not isFound
-      cart << {food_id: params[:id], count: 1}
+      cart.push({food_id: params[:id], count: 1})
     end
 
     session[:cart] = ActiveSupport::JSON.encode(cart)
 
-    render html: "Done" and return
+    redirect_to '/orders/new'
   end
 
   def pay
@@ -142,10 +146,38 @@ class OrdersController < ApplicationController
   # POST /orders.json
   def create
     @order = Order.new(order_params)
-    @food = Food.find(params[:food_id])
-    @order.food_id = params[:food_id]
+
+    if session[:cart] == nil and session[:cart] == ""
+      render html: "Empty Purchase Cart".html_safe and return
+    end
+
+    @order.price = 0
+    @food = nil
+    cart = ActiveSupport::JSON.decode(session[:cart])
+    count = 0
+    food_json = Array.new()
+
+    cart.each do |item|
+      food = Food.find(item["food_id"])
+      @order.price += food.price * params["food_count_" + item["food_id"]].to_i
+
+      if params["food_count_" + item["food_id"]].to_i > 0
+        tmp_count = params["food_count_" + item["food_id"]].to_i
+        count = count + tmp_count
+        food_json.push({id: item["food_id"], count: tmp_count, price: food.price * tmp_count})
+      end
+
+      if @food == nil
+        @food = Food.find(item["food_id"])
+      end
+    end
+
+    if @food == nil or count == 0
+      render html: "Empty Purchase Cart".html_safe and return
+    end
+
+    @order.food_json = ActiveSupport::JSON.encode(food_json)
     @order.user_id = current_user.id
-    @order.price = @food.price
     @order.restaurant_id = @food.restaurant_id
     @order.paid = 0
     @order.ready = 0
@@ -154,6 +186,8 @@ class OrdersController < ApplicationController
 
     respond_to do |format|
       if @order.save
+        session[:cart] = ""
+        
         format.html { redirect_to @order, notice: 'Order was successfully created.' }
         format.json { render :show, status: :created, location: @order }
       else
@@ -220,7 +254,7 @@ class OrdersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_params
       #params.require(:order).permit(:price, :paid, :ready, :assigned, :arrived, :address, :zip, :phone, :shipped_at, :arrived_at, :confirmed_at, :restaurant_id, :customer_id)
-      params.require(:order).permit(:food_id, :address, :zip, :phone)
+      params.require(:order).permit(:address, :zip, :phone)
     end
 
     def check_access_customer
