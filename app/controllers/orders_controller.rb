@@ -145,6 +145,22 @@ class OrdersController < ApplicationController
     render html: "<script>\nalert('Order is marked as ready.');\nwindow.location = '/restaurants/order';\n</script>".html_safe and return;
   end
 
+  def take
+    unless current_user.role == 'shipper'
+      render :file => 'public/404.html', :status => :not_found, :layout => false and return
+    end
+
+    @order = Order.find(params[:id])
+    @order.assigned = true
+    @order.shipper_id = Shipper.find_by_user_id(current_user.id).id
+    if @order.save
+      flash[:notice] = 'Order taken!'
+    else
+      flash[:notice] = 'Failed to take the order!'
+    end
+    redirect_to orders_path
+  end
+
   # GET /orders/1/edit
   #def edit
   #end
