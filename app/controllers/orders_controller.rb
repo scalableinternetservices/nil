@@ -136,6 +136,12 @@ class OrdersController < ApplicationController
     redirect_to '/orders/new'
   end
 
+  def clearcart
+    session[:cart] = ActiveSupport::JSON.encode(Array.new())
+
+    redirect_to '/restaurants'
+  end
+
   def pay
     @order.update(paid: 1)
 
