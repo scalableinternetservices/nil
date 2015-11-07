@@ -21,7 +21,7 @@ class FoodsController < ApplicationController
   
   def create
       @restaurant = Restaurant.find_by user_id: current_user.id
-      @food = @restaurant.foods.build(food_params)
+      @food = @restaurant.foods.create(food_params)
       upload
       if @food.save
         # flash[:success] = "Successfully add your new food!"
