@@ -12,17 +12,19 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def create
     super
     @user = current_user
+    logger.debug params
     if @user
       case @user.role
         when 'customer'
-          Customer.create(user_id: current_user.id)
+          @role = Customer.new(user_id: current_user.id)
         when 'restaurant'
-          Restaurant.create(user_id: current_user.id)
+          @role = Restaurant.new(user_id: current_user.id)
         when 'shipper'
-          Shipper.create(user_id: current_user.id)
+          @role = Shipper.new(user_id: current_user.id)
         else
-          
       end
+      @role.attributes = user_params
+      @role.save
     end
   end
 
@@ -62,6 +64,14 @@ class Users::RegistrationsController < Devise::RegistrationsController
           'application'
       end
     end
+  private
+
+    def user_params
+      params.require(:user).permit(:name, :address, :zip, :phone)
+    end
+
+
+
   # If you have extra params to permit, append them to the sanitizer.
   # def configure_sign_up_params
   #   devise_parameter_sanitizer.for(:sign_up) << :attribute
