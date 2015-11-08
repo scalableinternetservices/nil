@@ -11,8 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
-ActiveRecord::Schema.define(version: 20151106052401) do
+ActiveRecord::Schema.define(version: 20151108051032) do
 
   create_table "comments", force: :cascade do |t|
     t.text     "message",       limit: 65535
@@ -34,6 +33,8 @@ ActiveRecord::Schema.define(version: 20151106052401) do
     t.integer  "user_id",    limit: 4
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
+    t.float    "latitude",   limit: 24
+    t.float    "longitude",  limit: 24
   end
 
   add_index "customers", ["user_id"], name: "index_customers_on_user_id", using: :btree
@@ -84,6 +85,8 @@ ActiveRecord::Schema.define(version: 20151106052401) do
     t.integer  "user_id",    limit: 4
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
+    t.float    "latitude",   limit: 24
+    t.float    "longitude",  limit: 24
   end
 
   add_index "restaurants", ["user_id"], name: "index_restaurants_on_user_id", using: :btree
