@@ -8,7 +8,7 @@ class RestaurantsController < ApplicationController
     @restaurants = Restaurant.all
     if current_user.role.downcase == 'customer'
       @address = Customer.select(:address).find_by user_id: current_user.id
-    else
+    elsif current_user.role.downcase == 'restaurant'
       @address = Restaurant.select(:address).find_by user_id: current_user.id
     end
   end

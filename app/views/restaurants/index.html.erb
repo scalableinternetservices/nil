@@ -10,7 +10,9 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <%= link_to restaurant.name, restaurant_path(restaurant) %>
-                        <!--<span class = "pull-right">$<%#= restaurant.distance_to(@address) %></span>-->
+                        <% if restaurant.address != "" %>
+                        <span class = "pull-right">$<%= restaurant.distance_to(@address) %></span>
+                        <% end %>
                     </div>
                     <div class="panel-body">
                         <b>Address:</b> <%= restaurant.address %> <br/>
