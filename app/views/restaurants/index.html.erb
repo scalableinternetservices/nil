@@ -10,9 +10,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <%= link_to restaurant.name, restaurant_path(restaurant) %>
-                        <% if restaurant.address != "" %>
-                        <span class = "pull-right">$<%= restaurant.distance_to(@address) %></span>
-                        <% end %>
+                        <span class = "pull-right"><b>Distance: </b><%= number_with_precision(restaurant.distance_to(@address), :precision => 2) %> Mile</span>
                     </div>
                     <div class="panel-body">
                         <b>Address:</b> <%= restaurant.address %> <br/>

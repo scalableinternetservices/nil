@@ -7,10 +7,13 @@ class RestaurantsController < ApplicationController
   def index
     @restaurants = Restaurant.all
     if current_user.role.downcase == 'customer'
-      @address = Customer.select(:address).find_by user_id: current_user.id
+      @user = Customer.find_by user_id: current_user.id
     elsif current_user.role.downcase == 'restaurant'
-      @address = Restaurant.select(:address).find_by user_id: current_user.id
+      @user = Restaurant.find_by user_id: current_user.id
+    else
+      @user = Shipper.find_by user_id: current_user.id
     end
+    @address = @user.address
   end
 
   # GET /restaurants/1
