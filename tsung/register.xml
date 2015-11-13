@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE tsung SYSTEM "/home/ec2-user/opt/tsung-1.5.0/share/tsung/tsung-1.0.dtd">
+<tsung loglevel="warning">
+
+  <clients>
+    <client host="localhost" use_controller_vm="true" maxusers="10000"/>
+  </clients>
+
+  <servers>
+    <server host="ec2-52-33-150-149.us-west-2.compute.amazonaws.com" port="80" type="tcp"/>
+  </servers>
+
+  <load>
+    <arrivalphase phase="1" duration="1" unit="minute">
+      <users arrivalrate="50" unit="second"/>
+    </arrivalphase>
+  </load>
+
+  <sessions>
+    <session name="register_load" weight="1" type="ts_http">
+      <request>
+        <dyn_variable name="authenticity_token" ></dyn_variable>
+        <http url="/users/sign_up" version="1.1" method="GET"/>
+      </request>
+
+      <setdynvars sourcetype="eval" code="fun({Pid,DynVars})->
+                                            {ok, Val} = ts_dynvars:lookup(authenticity_token, DynVars),
+                                            edoc_lib:escape_uri(Val)
+                                          end.">
+        <var name="escaped_authenticity_token" />
+      </setdynvars>
+
+      <request subst="true">
+        <http url="/users"
+              version="1.1"
+              method="POST"
+              contents="authenticity_token=%%_escaped_authenticity_token%%&amp;user[role]=Restaurant&amp;user[email]=11%%_docid%%@tsung.com&amp;user[password]=12345678&amp;user[password_confirmation]=12345678" />
+      </request>
+    </session>
+  </sessions>
+</tsung>
