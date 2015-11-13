@@ -23,18 +23,15 @@
         <http url="/users/sign_up" version="1.1" method="GET"/>
       </request>
 
-      <setdynvars sourcetype="eval" code="fun({Pid,DynVars})->
-                                            {ok, Val} = ts_dynvars:lookup(authenticity_token, DynVars),
-                                            edoc_lib:escape_uri(Val)
-                                          end.">
-        <var name="escaped_authenticity_token" />
+      <setdynvars sourcetype="random_number" start="1" end="1000000">
+        <var name="rndint" />
       </setdynvars>
 
       <request subst="true">
         <http url="/users"
               version="1.1"
               method="POST"
-              contents="authenticity_token=%%_escaped_authenticity_token%%&amp;user[role]=Restaurant&amp;user[email]=11%%_docid%%@tsung.com&amp;user[password]=12345678&amp;user[password_confirmation]=12345678" />
+              contents="authenticity_token=%%_authenticity_token%%&amp;user[role]=Restaurant&amp;user[email]=%%_rndint%%@tsung.com&amp;user[password]=12345678&amp;user[password_confirmation]=12345678" />
       </request>
     </session>
   </sessions>
