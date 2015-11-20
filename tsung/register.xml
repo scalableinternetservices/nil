@@ -25,11 +25,11 @@
   </options>
 
   <sessions>
-    <session name="register_load" weight="1" type="ts_http">
-      <request>
+    <session name="register_load" weight="10" type="ts_http">
+      <!--<request>
         <dyn_variable name="authenticity_token" ></dyn_variable>
         <http url="/users/sign_up" version="1.1" method="GET"/>
-      </request>
+      </request>-->
 
       <setdynvars sourcetype="random_number" start="1" end="1000000">
         <var name="rndint" />
@@ -39,8 +39,121 @@
         <http url="/users"
               version="1.1"
               method="POST"
-              contents="authenticity_token=%%_authenticity_token%%&amp;user[role]=Restaurant&amp;user[email]=%%_rndint%%@tsung.com&amp;user[password]=12345678&amp;user[password_confirmation]=12345678" />
+              contents="user[role]=Restaurant&amp;user[email]=%%_rndint%%@tsung.com&amp;user[password]=12345678&amp;user[password_confirmation]=12345678" />
       </request>
+    </session>
+
+    <session name="register_cust_load" weight="10" type="ts_http">
+      <setdynvars sourcetype="random_number" start="1" end="1000000">
+        <var name="rndint" />
+      </setdynvars>
+
+      <request subst="true">
+        <http url="/users"
+              version="1.1"
+              method="POST"
+              contents="user[role]=Customer&amp;user[email]=%%_rndint%%@customer.com&amp;user[password]=12345678&amp;user[password_confirmation]=12345678" />
+      </request>
+    </session>
+
+    <session name="restaurant" weight="40" type="ts_http">
+      <setdynvars sourcetype="random_number" start="1" end="1000000">
+        <var name="rndint" />
+      </setdynvars>
+
+      <request subst="true">
+        <http url="/users"
+              version="1.1"
+              method="POST"
+              contents="user[role]=Restaurant&amp;user[email]=rest@tsung.com&amp;user[password]=12345678&amp;user[password_confirmation]=12345678" />
+      </request>
+
+      <!-- login -->
+      <request>
+        <http url="/" version="1.1" method="GET"></http>
+      </request>
+
+      <thinktime value="2" random="true"></thinktime>
+
+      <!-- login action -->
+      <request subst="true">
+        <http url="/users/sign_in"
+              version="1.1"
+              method="POST"
+              contents="user[role]=Customer&amp;user[email]=rest@tsung.com&amp;user[password]=12345678&amp;user[remember_me]=0" />
+      </request>
+
+      <request>
+        <http url="/restaurants/order" version="1.1" method="GET"></http>
+      </request>
+
+      <request>
+        <http url="/restaurants/order?filter=pending-confirmed" version="1.1" method="GET"></http>
+      </request>
+
+      <thinktime value="1" random="true"></thinktime>
+      <request>
+        <http url="/restaurants/order?filter=preparing" version="1.1" method="GET"></http>
+      </request>
+
+      <thinktime value="2" random="true"></thinktime>
+      <request>
+        <http url="/search?search=%%_rndint%%" version="1.1" method="GET"></http>
+      </request>
+
+    </session>
+
+    <session name="customer" weight="40" type="ts_http">
+      <setdynvars sourcetype="random_number" start="1" end="1000000">
+        <var name="rndint" />
+      </setdynvars>
+
+      <request subst="true">
+        <http url="/users"
+              version="1.1"
+              method="POST"
+              contents="user[role]=Customer&amp;user[email]=cust@tsung.com&amp;user[password]=12345678&amp;user[password_confirmation]=12345678" />
+      </request>
+
+      <!-- login -->
+      <request>
+        <http url="/" version="1.1" method="GET"></http>
+      </request>
+
+      <thinktime value="2" random="true"></thinktime>
+
+      <!-- login action -->
+      <request subst="true">
+        <http url="/users/sign_in"
+              version="1.1"
+              method="POST"
+              contents="user[role]=Customer&amp;user[email]=cust@tsung.com&amp;user[password]=12345678&amp;user[remember_me]=0" />
+      </request>
+
+      <request>
+        <http url="/restaurants/" version="1.1" method="GET"></http>
+      </request>
+
+      <thinktime value="2" random="true"></thinktime>
+
+      <setdynvars sourcetype="random_number" start="1" end="1000000">
+        <var name="rndint" />
+      </setdynvars>
+      
+      <request>
+        <http url="/restaurants/7" version="1.1" method="GET"></http>
+      </request>
+
+      <thinktime value="1" random="true"></thinktime>
+      <request>
+        <http url="/restaurants/order?filter=preparing" version="1.1" method="GET"></http>
+      </request>
+
+      <thinktime value="2" random="true"></thinktime>
+      <request>
+        <http url="/search?search=%%_rndint%%" version="1.1" method="GET"></http>
+      </request>
+
     </session>
   </sessions>
 </tsung>
