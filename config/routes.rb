@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   get 'restaurants/show'      => 'restaurants#show'
   get 'shippers/orders'       => 'shippers#showOrders'
   #get '/restaurant/:restaurant_id/:id' => 'foods#show'
-
+  get 'foods/new' => 'foods#new'
   resources :shippers
   resources :orders
   resources :restaurants do

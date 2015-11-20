@@ -1,5 +1,5 @@
 class FoodsController < ApplicationController
-  before_action :check_restid, only: [:new, :edit, :update, :destroy]
+  #before_action :check_restid, only: [:new, :edit, :update, :destroy]
 
   def index
     @restaurant = Restaurant.find(params[:restaurant_id])
