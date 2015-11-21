@@ -36,7 +36,7 @@
               <%= link_to 'Edit', edit_restaurant_food_path(), class:"btn btn-success" %>
               <%= link_to 'Back', restaurants_menu_path(), class: "btn btn-info" %>
               <% else %>
-              <%= link_to 'Back', restaurant_foods_url(@restaurant), class: "btn btn-info" %>
+              <%= link_to 'Back', restaurant_path(@restaurant), class: "btn btn-info" %>
               <% end %>
             </fieldset>
           </form>

@@ -20,7 +20,7 @@
                         <!--<span class = "pull-right">$<%#= restaurant.distance_to(@address) %></span>-->
                     </div>
                     <div class="panel-body">
-                        <b>Avg Rating:</b> <%= avg_rating*1.0/count %> <br/>
+                        <b>Avg Rating:</b> <%= number_with_precision(avg_rating*1.0/count, :precision => 2) %> <br/>
                         <b>Address:</b> <%= restaurant.address %> <br/>
                         <b>Zip Code:</b> <%= restaurant.zip %><br/>
                         <b>Phone:</b> <%= restaurant.phone %>

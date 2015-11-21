@@ -5,13 +5,14 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-total_num_of_customers = 20
-total_num_of_restaurants = 10
+total_num_of_customers = 50
+total_num_of_restaurants = 30
 total_num_of_shippers = 5
-total_num_of_foods = 100
+total_num_of_foods = 500
 total_num_of_comments = 100
 total_num_of_pending_orders = 100
 total_num_of_confirmed_orders = 50
+#22
 addresses = [
     "2838 Crenshaw Blvd",
     "695 S Western Ave",
@@ -36,7 +37,7 @@ addresses = [
     "1440 W PACIFIC COAST",
     "3060 SEPULVEDA BLVD."
 ]
-
+#32
 restaurants = [
     "A&W Restaurants",
     "Arby's",
@@ -48,16 +49,48 @@ restaurants = [
     "Benihana",
     "Big Boy",
     "Bertucci's",
+    "Cheesecake Factory",
+    "Chick-fil-A",
+    "Chili's",
+    "Chronic Tacos",
+    "Church's",
+    "CiCi's Pizza",
+    "Country Buffet",
+    "Denny's",
+    "Elephant Bar",
+    "Farmer Boys",
+    "Fatburger",
+    "Fresh Choice",
+    "Friendly's",
+    "Hardee's",
+    "In-N-Out Burger",
+    "Jamba Juice",
+    "Jack's",
+    "Jet's Pizza",
+    "KFC",
+    "Luby's",
+    "Mr. Hero",
     "Feast"
     ]
-    
+#17
 foods = [
     "Bagel",
     "Brown bread",
     "Omelette",
     "Scrambled eggs",
     "Sandwich",
-    "Hamburger"
+    "Hamburger",
+    "Coco Cola",
+    "Juice",
+    "French Fries",
+    "Pizza",
+    "Soup",
+    "Apple",
+    "Pie",
+    "Panini",
+    "Salad",
+    "Boba Tea",
+    "Taco"
     ]
 #Create customers
 total_num_of_customers.times do |cus|
@@ -69,7 +102,7 @@ total_num_of_customers.times do |cus|
   )
   customer = Customer.create(
       name: "Customer_" + (cus + 1).to_s,
-      address: addresses[cus],
+      address: addresses[rand(22)],
       zip: 90024,
       phone: 1234567890,
       user_id: user.id
@@ -86,7 +119,7 @@ total_num_of_restaurants.times do |res|
   )
   restaurant = Restaurant.create(
       name: restaurants[res],
-      address: addresses[res],
+      address: addresses[rand(22)],
       zip: 90024,
       phone: 1234567890,
       user_id: user.id
@@ -113,7 +146,7 @@ end
 #Create food
 total_num_of_foods.times do |food|
     Food.create(
-      name: foods[rand(6)],
+      name: foods[rand(17)],
       price: rand(30) + 1,
       num_left: rand(200) + 1,
       description: "Delicious",
@@ -142,7 +175,7 @@ total_num_of_pending_orders.times do |order|
       ready: false,
       assigned: false,
       arrived: false,
-      address: addresses[rand(20)],
+      address: addresses[rand(22)],
       zip:90024,
       phone:1234567890,
       restaurant_id: restaurant,
@@ -160,7 +193,7 @@ total_num_of_confirmed_orders.times do |order|
       ready: true,
       assigned: false,
       arrived: false,
-      address: addresses[rand(20)],
+      address: addresses[rand(22)],
       zip:90024,
       phone:1234567890,
       restaurant_id: restaurant,
