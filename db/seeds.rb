@@ -8,9 +8,10 @@
 total_num_of_customers = 20
 total_num_of_restaurants = 10
 total_num_of_shippers = 5
-total_num_of_foods = 40
-total_num_of_comments = 50
-total_num_of_orders = 50
+total_num_of_foods = 100
+total_num_of_comments = 100
+total_num_of_pending_orders = 100
+total_num_of_confirmed_orders = 50
 addresses = [
     "2838 Crenshaw Blvd",
     "695 S Western Ave",
@@ -116,6 +117,7 @@ total_num_of_foods.times do |food|
       price: rand(30) + 1,
       num_left: rand(200) + 1,
       description: "Delicious",
+      image: "default.jpg",
       restaurant_id: rand(total_num_of_restaurants) + 1
     )   
 end
@@ -131,7 +133,9 @@ total_num_of_comments.times do |comment|
 end
 
 #Create orders
-total_num_of_orders.times do |order|
+total_num_of_pending_orders.times do |order|
+  food = Food.find(rand(total_num_of_foods) + 1)
+  restaurant = food.restaurant_id
     Order.create(
       price: rand(100) + 1,
       paid: true,
@@ -141,7 +145,27 @@ total_num_of_orders.times do |order|
       address: addresses[rand(20)],
       zip:90024,
       phone:1234567890,
-      restaurant_id: rand(total_num_of_restaurants) + 1,
-      user_id: rand(total_num_of_customers) + 1
+      restaurant_id: restaurant,
+      user_id: rand(total_num_of_customers) + 1,
+      food_json: "[{\"id\":\"#{food.id}\",\"count\":1,\"price\":\"#{food.price}\"}]"
+    )   
+end
+
+total_num_of_confirmed_orders.times do |order|
+  food = Food.find(rand(total_num_of_foods) + 1)
+  restaurant = food.restaurant_id
+    Order.create(
+      price: rand(100) + 1,
+      paid: true,
+      ready: true,
+      assigned: false,
+      arrived: false,
+      address: addresses[rand(20)],
+      zip:90024,
+      phone:1234567890,
+      restaurant_id: restaurant,
+      user_id: rand(total_num_of_customers) + 1,
+      confirmed_at: 0.days.ago,
+      food_json: "[{\"id\":\"#{food.id}\",\"count\":1,\"price\":\"#{food.price}\"}]"
     )   
 end

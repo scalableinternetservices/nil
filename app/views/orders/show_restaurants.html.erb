@@ -39,7 +39,7 @@
                                       elsif @order.confirmed_at != nil
                                         "Confirmed at #{@order.confirmed_at}"
                                       elsif @order.paid
-                                        "Pending Confirm"
+                                        "Pending"
                                       else
                                         "Unpaid"
                                       end
@@ -68,7 +68,7 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Food Name</th>
+                                    <th>Food</th>
                                     <th>Quantity</th>
                                     <th>Price</th>
                                 </tr>
@@ -84,7 +84,6 @@
                             </tbody>
                         <% end %>
                         </table>
-                        <% if not @order.paid %><a class="btn btn-info" href="/orders/pay/<%= @order.id %>">Pay Bill</a><% end %>
                         <a class="btn btn-info" href="/restaurants/order">Return</a>
                     </div>
                     <!-- /.table-responsive -->

@@ -18,7 +18,7 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Food Name</th>
+                                    <th>Food</th>
                                     <th>Price</th>
                                     <th>Quantity</th>
                                 </tr>
@@ -68,10 +68,9 @@
                                     <%= f.label :phone %>
                                     <%= f.text_field :phone, class: 'form-control', :value => @customer.phone %>
                                 </div>
-
-                                <button type="submit" class="btn btn-success">Order</button>
-                                <a class="btn btn-info" href="javascript:history.back()">Continue Shopping</a>
-                                <a class="btn btn-danger" href="/orders/clearcart">Empty Cart</a>
+                                <a class="btn btn-info" href="javascript:history.back()">Back</a>
+                                <button type="submit" class="btn btn-success">Checkout</button>
+                                <a class="btn btn-danger" href="/orders/clearcart">Clear</a>
                             </fieldset>
                     </div>
                 </div>
