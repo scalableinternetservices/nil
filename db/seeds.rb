@@ -5,12 +5,12 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-total_num_of_customers = 50
+total_num_of_customers = 200
 total_num_of_restaurants = 30
-total_num_of_shippers = 5
+total_num_of_shippers = 30
 total_num_of_foods = 500
 total_num_of_comments = 100
-total_num_of_pending_orders = 100
+total_num_of_pending_orders_per_restaurant = 5
 total_num_of_confirmed_orders = 50
 #22
 addresses = [
@@ -166,11 +166,12 @@ total_num_of_comments.times do |comment|
 end
 
 #Create orders
-total_num_of_pending_orders.times do |order|
-  food = Food.find(rand(total_num_of_foods) + 1)
-  restaurant = food.restaurant_id
+total_num_of_restaurants.times do |res|
+  total_num_of_pending_orders_per_restaurant.times do |order|
+    restaurant = Restaurant.find(res + 1)
+    food = restaurant.foods.limit(1).order("RAND()")
     Order.create(
-      price: rand(100) + 1,
+      price: food.price,
       paid: true,
       ready: false,
       assigned: false,
@@ -182,6 +183,7 @@ total_num_of_pending_orders.times do |order|
       user_id: rand(total_num_of_customers) + 1,
       food_json: "[{\"id\":\"#{food.id}\",\"count\":1,\"price\":\"#{food.price}\"}]"
     )   
+  end
 end
 
 total_num_of_confirmed_orders.times do |order|

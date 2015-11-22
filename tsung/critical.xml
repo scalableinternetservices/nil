@@ -7,7 +7,7 @@
   </clients>
 
   <servers>
-    <server host="ec2-52-33-150-149.us-west-2.compute.amazonaws.com" port="80" type="tcp"/>
+    <server host="http://ec2-52-25-242-152.us-west-2.compute.amazonaws.com" port="80" type="tcp"/>
   </servers>
 
   <load>
@@ -65,7 +65,7 @@
     </session>
     
     <session name="customer" weight="40" type="ts_http">
-        <setdynvars sourcetype="random_number" start="1" end="50">
+        <setdynvars sourcetype="random_number" start="1" end="200">
             <var name="rndcus" />
         </setdynvars>
         <!-- login -->
@@ -164,6 +164,7 @@
         <thinktime value="2" random="true"></thinktime>
         
           <request subst="true">
+            <dyn_variable name="created_order_id" re="[Ll]ocation: http://.*/orders/(.*)\r"/>
             <http url="/orders"
                   version="1.1"
                   method="POST"
@@ -174,13 +175,15 @@
           
       <!-- view order -->
         <request>
-            <http url="customers/order%%" version="1.1" method="GET"></http>
+            <http url="customers/order" version="1.1" method="GET"></http>
         </request>
         
         <thinktime value="2" random="true"></thinktime>
       
       <!-- pay order -->
-
+        <request>
+            <http url="orders/pay/%%_created_order_id%%" version="1.1" method="GET"></http>
+        </request>
       <thinktime value="2" random="true"></thinktime>
       
       <!-- log out -->
@@ -190,46 +193,143 @@
     </session>
 
     <session name="restaurant" weight="20" type="ts_http">
-        <setdynvars sourcetype="random_number" start="1" end="30">
-            <var name="rndres" />
-        </setdynvars>
-        <!-- login -->
-        <request>
-            <http url="/" version="1.1" method="GET"></http>
-        </request>
-        
-        <thinktime value="2" random="true"></thinktime>
+      <setdynvars sourcetype="random_number" start="1" end="30">
+          <var name="rndres" />
+      </setdynvars>
+      <!-- login -->
+      <request>
+          <http url="/" version="1.1" method="GET"></http>
+      </request>
+      
+      <thinktime value="2" random="true"></thinktime>
 
-        <request subst="true">
-            <http url="/users/sign_in"
-              version="1.1"
-              method="POST"
-              contents="utf8=%E2%9C%93&amp;user%5Bemail%5D=restaurant_%%_rndres%%@example.com&amp;user%5Bpassword%5D=88888888&amp;user%5Bremember_me%5D=0&amp;commit=Log+in" />
-        </request>
-        
-        <thinktime value="2" random="true"></thinktime>
-        
-        <!-- view menu -->
+      <request subst="true">
+          <http url="/users/sign_in"
+            version="1.1"
+            method="POST"
+            contents="utf8=%E2%9C%93&amp;user%5Bemail%5D=restaurant_%%_rndres%%@example.com&amp;user%5Bpassword%5D=88888888&amp;user%5Bremember_me%5D=0&amp;commit=Log+in" />
+      </request>
+      
+      <thinktime value="2" random="true"></thinktime>
+      
+      <!-- view menu -->
+      <request>
+          <http url="/restaurants/menu" version="1.1" method="GET"></http>
+      </request>
+      
+      <thinktime value="2" random="true"></thinktime>
+      
+      <!-- add food -->
+      <request>
+          <http url="/foods/new" version="1.1" method="GET"></http>
+      </request>
+      
+      <thinktime value="2" random="true"></thinktime>
+      
+      <setdynvars sourcetype="random_number" start="1" end="10000">
+          <var name="rndfood" />
+      </setdynvars>
+
+      <!-- [sample value] - nl: CRLF -->
+      <setdynvars sourcetype="eval" code='fun({Pid,DynVars})-> [[13, 10]] end.'>
+        <var name="nl" />
+      </setdynvars>
+
+      <request subst="true">
+          <dyn_variable name="created_food_url" re="[Ll]ocation: (http://.*)\r"/>
+          <http
+            url='/restaurants/%%_rndres%%/foods'
+            version='1.1'
+            method='POST'                                  
+            Content-Type='multipart/form-data; boundary=----FormBoundary'
+            contents='------FormBoundary%%_nl%%Content-Disposition: form-data; name="utf8"%%_nl%%%%_nl%%%E2%9C%93%%_nl%%------FormBoundary%%_nl%%Content-Disposition: form-data; name="food[name]"%%_nl%%%%_nl%%%%_rndfood%%%%_nl%%------FormBoundary%%_nl%%Content-Disposition: form-data; name="food[price]"%%_nl%%%%_nl%%10%%_nl%%------FormBoundary%%_nl%%Content-Disposition: form-data; name="food[description]"%%_nl%%%%_nl%%Good%%_nl%%------FormBoundary%%_nl%%Content-Disposition: form-data; name="food[num_left]"%%_nl%%%%_nl%%100%%_nl%%------FormBoundary%%_nl%%Content-Disposition: form-data; name="food[image]"; filename=""%%_nl%%Content-Type: application/octet-stream%%_nl%%------FormBoundary--%%_nl%%%%_nl%%'>
+          </http>
+      </request>
+
+      <thinktime value="2" random="true"></thinktime>
+      <!-- delete food -->
+      <request subst="true">
+        <http url="%%_created_food_url%%" version="1.1" method="GET"></http>
+      </request>
+
+      <thinktime value="2" random="true"></thinktime>
+
         <!-- view orders -->
       <request>
         <http url="/restaurants/order" version="1.1" method="GET"></http>
       </request>
 
+      <thinktime value="2" random="true"></thinktime>
+
+      <!-- confirm order -->
+      <setdynvars sourcetype="random_number" start="(%%_rndres%% - 1)* 5 + 1" end="%%_rndres%% * 5">
+        <var name="rndorder" />
+      </setdynvars>
+
       <request>
-        <http url="/restaurants/order?filter=pending-confirmed" version="1.1" method="GET"></http>
+        <http url="/orders/confirmed/%%_rndorder%%" version="1.1" method="GET"></http>
       </request>
 
-      <thinktime value="1" random="true"></thinktime>
+      <thinktime value="5" random="true"></thinktime>
+
       <request>
-        <http url="/restaurants/order?filter=preparing" version="1.1" method="GET"></http>
+        <http url="/orders/ready/%%_rndorder%%" version="1.1" method="GET"></http>
       </request>
 
       <thinktime value="2" random="true"></thinktime>
-      <!-- log out -->
+        <!-- log out -->
         <request>
             <http url='/users/sign_out' version='1.1' method='DELETE'></http>
         </request>
     </session>
 
+    <session name="shipper" weight="20" type="ts_http">
+      <setdynvars sourcetype="random_number" start="1" end="30">
+          <var name="rndshipper" />
+      </setdynvars>
+      <!-- login -->
+      <request>
+          <http url="/" version="1.1" method="GET"></http>
+      </request>
+      
+      <thinktime value="2" random="true"></thinktime>
+
+      <request subst="true">
+          <http url="/users/sign_in"
+            version="1.1"
+            method="POST"
+            contents="utf8=%E2%9C%93&amp;user%5Bemail%5D=shipper_%%_rndres%%@example.com&amp;user%5Bpassword%5D=88888888&amp;user%5Bremember_me%5D=0&amp;commit=Log+in" />
+      </request>
+      
+      <thinktime value="2" random="true"></thinktime>
+
+      <!-- view orders -->
+      <request>
+          <http url="/orders" version="1.1" method="GET"></http>
+      </request>
+
+      <thinktime value="2" random="true"></thinktime>
+
+      <!-- take orders -->
+      <setdynvars sourcetype="random_number" start="151" end="200">
+          <var name="rndorder" />
+      </setdynvars>
+
+      <request>
+          <http url="/orders/%%_rndorder%%/take" version="1.1" method="GET"></http>
+      </request>
+
+      <thinktime value="2" random="true"></thinktime>
+
+      <!-- view taken orders -->
+      <request>
+          <http url="/shippers/orders" version="1.1" method="GET"></http>
+      </request>
+
+      <!-- log out -->
+      <request>
+            <http url='/users/sign_out' version='1.1' method='DELETE'></http>
+      </request>
+    </session>
   </sessions>
 </tsung>
