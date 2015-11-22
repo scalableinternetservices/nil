@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE tsung SYSTEM "/home/ec2-user/opt/tsung-1.5.0/share/tsung/tsung-1.0.dtd">
+<tsung loglevel="warning">
+
+  <clients>
+    <client host="localhost" use_controller_vm="true" maxusers="10000"/>
+  </clients>
+
+  <servers>
+    <server host="ec2-52-33-150-149.us-west-2.compute.amazonaws.com" port="80" type="tcp"/>
+  </servers>
+
+  <load>
+    <arrivalphase phase="1" duration="30" unit="second">
+      <users arrivalrate="1" unit="second"/>
+    </arrivalphase>
+    <arrivalphase phase="2" duration="30" unit="second">
+      <users arrivalrate="2" unit="second"></users>
+    </arrivalphase>
+    <arrivalphase phase="3" duration="30" unit="second">
+      <users arrivalrate="4" unit="second"></users>
+    </arrivalphase>
+  </load>
+
+  <options>
+    <option name="global_ack_timeout" value="2000"></option>
+
+    <option type="ts_http" name="user_agent">
+      <user_agent probability="100">Mozilla/5.0 (Windows; U; Windows NT 5.2; fr-FR; rv:1.7.8) Gecko/20050511 Firefox/1.0.4</user_agent>
+    </option>
+    <!-- The restaurant.csv file contains the list of restaurants -->
+    <!-- The words are used as search keywords -->
+    <option name="file_server" id='restaurant_names' value="./restaurant.csv"></option>
+  </options>
+<!-- ================================================= -->
+<!--                                                        Sessions Weight               -->
+<!-- [customer: sign-in;view restaurants;search restaurants; view menu; create comments; order food 10                 -->
+<!-- [customer: view-restaurants]                               10                 -->
+<!-- [customer: search-by-restaurant]                           5                  -->
+<!-- [customer: search-by-food]                                 4                  -->
+<!-- [customer: create-comment]                                 1                  -->
+<!-- [customer: create-order]                                   1                  -->
+<!-- [restaurant: create-delete-food]                           1                  -->
+<!-- [restaurant: confirm-order; ready-to-pickup order]         1                  -->
+<!-- [shipper: visit-all-order;take-order;visit-my-order]       1                  -->
+<!-- ================================================= -->
+
+  <sessions>
+    <session name="sign-up" weight="5" type="ts_http">
+      <!--<request>
+        <dyn_variable name="authenticity_token" ></dyn_variable>
+        <http url="/users/sign_up" version="1.1" method="GET"/>
+      </request>-->
+
+      <setdynvars sourcetype="random_number" start="1" end="1000000">
+        <var name="rndint" />
+      </setdynvars>
+
+      <request subst="true">
+        <http url="/users"
+              version="1.1"
+              method="POST"
+              contents="user[role]=Restaurant&amp;user[email]=%%_rndint%%@tsung.com&amp;user[password]=88888888&amp;user[password_confirmation]=88888888" />
+      </request>
+    </session>
+    
+    <session name="customer" weight="40" type="ts_http">
+        <setdynvars sourcetype="random_number" start="1" end="50">
+            <var name="rndcus" />
+        </setdynvars>
+        <!-- login -->
+        <request>
+            <http url="/" version="1.1" method="GET"></http>
+        </request>
+        
+        <thinktime value="2" random="true"></thinktime>
+
+        <request subst="true">
+            <http url="/users/sign_in"
+              version="1.1"
+              method="POST"
+              contents="utf8=%E2%9C%93&amp;user%5Bemail%5D=customer_%%_rndcus%%@example.com&amp;user%5Bpassword%5D=88888888&amp;user%5Bremember_me%5D=0&amp;commit=Log+in" />
+        </request>
+        
+        <thinktime value="2" random="true"></thinktime>
+        
+        <!-- search restaurant -->
+      <setdynvars sourcetype="file" fileid="restaurant_names" delimiter=";" order="random">
+        <var name="random_keyword" />
+      </setdynvars>
+        <request>
+            <http url="/search?search=%%_random_keyword%%" version="1.1" method="GET"></http>
+        </request>
+        
+        <thinktime value="2" random="true"></thinktime>
+        
+        <!-- view restaurants -->
+        <request>
+            <http url="/restaurants/" version="1.1" method="GET"></http>
+        </request>
+
+        <thinktime value="2" random="true"></thinktime>
+        
+        <!-- view menu -->
+        <setdynvars sourcetype="random_number" start="1" end="30">
+            <var name="rndres" />
+        </setdynvars>
+
+      <request>
+        <http url="/restaurants/%%_rndres%%" version="1.1" method="GET"></http>
+      </request>
+
+      <thinktime value="3" random="true"></thinktime>
+      
+      <!-- add comments -->
+      <request>
+          <http url="/restaurants/%%_rndres%%/comments/new" version="1.1" method="GET"></http>
+      </request>
+        <!--<request>
+          <dyn_variable name="authenticity_token" ></dyn_variable> 
+          <http url="/restaurants/%%_rndres%%/comments/new" version="1.1" method="GET"></http>
+        </request>-->
+        
+      <thinktime value="2" random="true"></thinktime>
+      <!-- if we got the authenticity_token, add comments -->
+      <!-- otherwise, do nothing -->
+      <!--<if var="authenticity_token" neq="">-->
+        <setdynvars sourcetype="random_number" start="1" end="5">
+            <var name="rndrate" />
+        </setdynvars>
+        <request subst="true">
+            <http
+              url='/restaurants/%%_rndres%%/comments'
+              version='1.1'
+              method='POST'
+              contents='utf8=%E2%9C%93&amp;comment%5Bmessage%5D=New+comments%21&amp;comment%5Brating%5D=%%_rndrate%%&amp;commit=Submit+comment'>
+            </http>
+        </request>
+      <!--</if>-->
+      
+      <thinktime value="2" random="true"></thinktime>
+      
+        <!-- view food -->
+        <setdynvars sourcetype="random_number" start="1" end="500">
+            <var name="rndfood" />
+        </setdynvars>
+        <request>
+            <http url="/restaurants/%%_rndres%%/foods/%%_rndfood%%" version="1.1" method="GET"></http>
+        </request>
+        
+        <thinktime value="2" random="true"></thinktime>
+        
+        <request>
+            <http url="/restaurants/%%_rndres%%" version="1.1" method="GET"></http>
+        </request>
+        
+        <thinktime value="2" random="true"></thinktime>
+        
+        <!-- order food -->
+        <request>
+          <http url="/orders/addtocart/%%_rndfood%%" version="1.1" method="GET"></http>
+        </request>
+        
+        <thinktime value="2" random="true"></thinktime>
+        
+          <request subst="true">
+            <http url="/orders"
+                  version="1.1"
+                  method="POST"
+                  contents="utf8=%E2%9C%93&amp;food_count_%%_rndfood%%=1&amp;order%5Baddress%5D=2838+Crenshaw+Blvd&amp;order%5Bzip%5D=90024&amp;order%5Bphone%5D=1234567890" />
+          </request>
+          
+          <thinktime value="2" random="true"></thinktime>
+          
+      <!-- view order -->
+        <request>
+            <http url="customers/order%%" version="1.1" method="GET"></http>
+        </request>
+        
+        <thinktime value="2" random="true"></thinktime>
+      
+      <!-- pay order -->
+
+      <thinktime value="2" random="true"></thinktime>
+      
+      <!-- log out -->
+        <request>
+            <http url='/users/sign_out' version='1.1' method='DELETE'></http>
+        </request>
+    </session>
+
+    <session name="restaurant" weight="20" type="ts_http">
+        <setdynvars sourcetype="random_number" start="1" end="30">
+            <var name="rndres" />
+        </setdynvars>
+        <!-- login -->
+        <request>
+            <http url="/" version="1.1" method="GET"></http>
+        </request>
+        
+        <thinktime value="2" random="true"></thinktime>
+
+        <request subst="true">
+            <http url="/users/sign_in"
+              version="1.1"
+              method="POST"
+              contents="utf8=%E2%9C%93&amp;user%5Bemail%5D=restaurant_%%_rndres%%@example.com&amp;user%5Bpassword%5D=88888888&amp;user%5Bremember_me%5D=0&amp;commit=Log+in" />
+        </request>
+        
+        <thinktime value="2" random="true"></thinktime>
+        
+        <!-- view menu -->
+        <!-- view orders -->
+      <request>
+        <http url="/restaurants/order" version="1.1" method="GET"></http>
+      </request>
+
+      <request>
+        <http url="/restaurants/order?filter=pending-confirmed" version="1.1" method="GET"></http>
+      </request>
+
+      <thinktime value="1" random="true"></thinktime>
+      <request>
+        <http url="/restaurants/order?filter=preparing" version="1.1" method="GET"></http>
+      </request>
+
+      <thinktime value="2" random="true"></thinktime>
+      <!-- log out -->
+        <request>
+            <http url='/users/sign_out' version='1.1' method='DELETE'></http>
+        </request>
+    </session>
+
+  </sessions>
+</tsung>
