@@ -7,7 +7,7 @@
   </clients>
 
   <servers>
-    <server host="http://ec2-52-25-242-152.us-west-2.compute.amazonaws.com" port="80" type="tcp"/>
+    <server host="ec2-52-11-66-212.us-west-2.compute.amazonaws.com" port="80" type="tcp"/>
   </servers>
 
   <load>
@@ -32,25 +32,9 @@
     <!-- The words are used as search keywords -->
     <option name="file_server" id='restaurant_names' value="./restaurant.csv"></option>
   </options>
-<!-- ================================================= -->
-<!--                                                        Sessions Weight               -->
-<!-- [customer: sign-in;view restaurants;search restaurants; view menu; create comments; order food 10                 -->
-<!-- [customer: view-restaurants]                               10                 -->
-<!-- [customer: search-by-restaurant]                           5                  -->
-<!-- [customer: search-by-food]                                 4                  -->
-<!-- [customer: create-comment]                                 1                  -->
-<!-- [customer: create-order]                                   1                  -->
-<!-- [restaurant: create-delete-food]                           1                  -->
-<!-- [restaurant: confirm-order; ready-to-pickup order]         1                  -->
-<!-- [shipper: visit-all-order;take-order;visit-my-order]       1                  -->
-<!-- ================================================= -->
 
   <sessions>
     <session name="sign-up" weight="5" type="ts_http">
-      <!--<request>
-        <dyn_variable name="authenticity_token" ></dyn_variable>
-        <http url="/users/sign_up" version="1.1" method="GET"/>
-      </request>-->
 
       <setdynvars sourcetype="random_number" start="1" end="1000000">
         <var name="rndint" />
@@ -68,6 +52,7 @@
         <setdynvars sourcetype="random_number" start="1" end="200">
             <var name="rndcus" />
         </setdynvars>
+        
         <!-- login -->
         <request>
             <http url="/" version="1.1" method="GET"></http>
@@ -116,27 +101,20 @@
       <request>
           <http url="/restaurants/%%_rndres%%/comments/new" version="1.1" method="GET"></http>
       </request>
-        <!--<request>
-          <dyn_variable name="authenticity_token" ></dyn_variable> 
-          <http url="/restaurants/%%_rndres%%/comments/new" version="1.1" method="GET"></http>
-        </request>-->
         
       <thinktime value="2" random="true"></thinktime>
-      <!-- if we got the authenticity_token, add comments -->
-      <!-- otherwise, do nothing -->
-      <!--<if var="authenticity_token" neq="">-->
-        <setdynvars sourcetype="random_number" start="1" end="5">
-            <var name="rndrate" />
-        </setdynvars>
-        <request subst="true">
-            <http
-              url='/restaurants/%%_rndres%%/comments'
-              version='1.1'
-              method='POST'
-              contents='utf8=%E2%9C%93&amp;comment%5Bmessage%5D=New+comments%21&amp;comment%5Brating%5D=%%_rndrate%%&amp;commit=Submit+comment'>
-            </http>
-        </request>
-      <!--</if>-->
+      
+      <setdynvars sourcetype="random_number" start="1" end="5">
+          <var name="rndrate" />
+      </setdynvars>
+      <request subst="true">
+          <http
+            url='/restaurants/%%_rndres%%/comments'
+            version='1.1'
+            method='POST'
+            contents='utf8=%E2%9C%93&amp;comment%5Bmessage%5D=New+comments%21&amp;comment%5Brating%5D=%%_rndrate%%&amp;commit=Submit+comment'>
+          </http>
+      </request>
       
       <thinktime value="2" random="true"></thinktime>
       
@@ -157,6 +135,7 @@
         <thinktime value="2" random="true"></thinktime>
         
         <!-- order food -->
+        
         <request>
           <http url="/orders/addtocart/%%_rndfood%%" version="1.1" method="GET"></http>
         </request>
@@ -181,10 +160,19 @@
         <thinktime value="2" random="true"></thinktime>
       
       <!-- pay order -->
+      <if var="created_order_id" neq="">
         <request>
             <http url="orders/pay/%%_created_order_id%%" version="1.1" method="GET"></http>
         </request>
       <thinktime value="2" random="true"></thinktime>
+      </if>
+      
+      <!-- Uncomment the following to debug print your dynamic variables  --> 
+      <setdynvars sourcetype="eval" code="fun( {Pid, DynVars} ) ->
+        io:format([126, $p, 126, $n, 126, $n], [DynVars]),
+        ok end.">
+        <var name="dump" />
+      </setdynvars>
       
       <!-- log out -->
         <request>
@@ -241,14 +229,14 @@
             url='/restaurants/%%_rndres%%/foods'
             version='1.1'
             method='POST'                                  
-            Content-Type='multipart/form-data; boundary=----FormBoundary'
+            content_type='multipart/form-data; boundary=------FormBoundary'
             contents='------FormBoundary%%_nl%%Content-Disposition: form-data; name="utf8"%%_nl%%%%_nl%%%E2%9C%93%%_nl%%------FormBoundary%%_nl%%Content-Disposition: form-data; name="food[name]"%%_nl%%%%_nl%%%%_rndfood%%%%_nl%%------FormBoundary%%_nl%%Content-Disposition: form-data; name="food[price]"%%_nl%%%%_nl%%10%%_nl%%------FormBoundary%%_nl%%Content-Disposition: form-data; name="food[description]"%%_nl%%%%_nl%%Good%%_nl%%------FormBoundary%%_nl%%Content-Disposition: form-data; name="food[num_left]"%%_nl%%%%_nl%%100%%_nl%%------FormBoundary%%_nl%%Content-Disposition: form-data; name="food[image]"; filename=""%%_nl%%Content-Type: application/octet-stream%%_nl%%------FormBoundary--%%_nl%%%%_nl%%'>
           </http>
       </request>
 
       <thinktime value="2" random="true"></thinktime>
       
-      <!-- delete food -->
+      <!-- delete food --> 
       <request>
           <http url="/restaurants/menu" version="1.1" method="GET"></http>
       </request>
@@ -269,7 +257,8 @@
       <thinktime value="2" random="true"></thinktime>
 
       <!-- confirm order -->
-      <setdynvars sourcetype="random_number" start="(%%_rndres%% - 1)* 5 + 1" end="%%_rndres%% * 5">
+      <!--<setdynvars sourcetype="random_number" start="(rndres - 1)* 5 + 1" end="rndres * 5">-->
+      <setdynvars sourcetype="random_number" start="1" end="150">
         <var name="rndorder" />
       </setdynvars>
 
@@ -284,6 +273,14 @@
       </request>
 
       <thinktime value="2" random="true"></thinktime>
+      
+      <!-- Uncomment the following to debug print your dynamic variables  --> 
+      <setdynvars sourcetype="eval" code="fun( {Pid, DynVars} ) ->
+        io:format([126, $p, 126, $n, 126, $n], [DynVars]),
+        ok end.">
+        <var name="dump" />
+      </setdynvars>
+      
         <!-- log out -->
         <request>
             <http url='/users/sign_out' version='1.1' method='DELETE'></http>
@@ -305,7 +302,7 @@
           <http url="/users/sign_in"
             version="1.1"
             method="POST"
-            contents="utf8=%E2%9C%93&amp;user%5Bemail%5D=shipper_%%_rndres%%@example.com&amp;user%5Bpassword%5D=88888888&amp;user%5Bremember_me%5D=0&amp;commit=Log+in" />
+            contents="utf8=%E2%9C%93&amp;user%5Bemail%5D=shipper_%%_rndshipper%%@example.com&amp;user%5Bpassword%5D=88888888&amp;user%5Bremember_me%5D=0&amp;commit=Log+in" />
       </request>
       
       <thinktime value="2" random="true"></thinktime>
@@ -332,6 +329,13 @@
       <request>
           <http url="/shippers/orders" version="1.1" method="GET"></http>
       </request>
+      
+      <!-- Uncomment the following to debug print your dynamic variables  --> 
+      <setdynvars sourcetype="eval" code="fun( {Pid, DynVars} ) ->
+        io:format([126, $p, 126, $n, 126, $n], [DynVars]),
+        ok end.">
+        <var name="dump" />
+      </setdynvars>
 
       <!-- log out -->
       <request>
