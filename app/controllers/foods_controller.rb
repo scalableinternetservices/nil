@@ -25,7 +25,7 @@ class FoodsController < ApplicationController
       upload
       if @food.save
         # flash[:success] = "Successfully add your new food!"
-        redirect_to restaurants_menu_path()
+        redirect_to restaurant_food_path(@restaurant, @food)
       else
         render :new
       end
@@ -82,7 +82,7 @@ class FoodsController < ApplicationController
           end
           @food.update image: file_name
         elsif !@food.image
-          @food.update image: 'lays-classic.png'
+          @food.update image: 'default.jpg'
         end
     end
 

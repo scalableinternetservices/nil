@@ -169,9 +169,10 @@ end
 total_num_of_restaurants.times do |res|
   total_num_of_pending_orders_per_restaurant.times do |order|
     restaurant = Restaurant.find(res + 1)
-    food = restaurant.foods.limit(1).order("RAND()")
+    foods = restaurant.foods
+    food_id = foods.pluck(:id).sample
     Order.create(
-      price: food.price,
+      price: rand(100) + 1,
       paid: true,
       ready: false,
       assigned: false,
@@ -179,9 +180,9 @@ total_num_of_restaurants.times do |res|
       address: addresses[rand(22)],
       zip:90024,
       phone:1234567890,
-      restaurant_id: restaurant,
+      restaurant_id: restaurant.id,
       user_id: rand(total_num_of_customers) + 1,
-      food_json: "[{\"id\":\"#{food.id}\",\"count\":1,\"price\":\"#{food.price}\"}]"
+      food_json: "[{\"id\":\"#{food_id}\",\"count\":1,\"price\":\"10\"}]"
     )   
   end
 end

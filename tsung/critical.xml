@@ -247,9 +247,16 @@
       </request>
 
       <thinktime value="2" random="true"></thinktime>
+      
       <!-- delete food -->
+      <request>
+          <http url="/restaurants/menu" version="1.1" method="GET"></http>
+      </request>
+      
+      <thinktime value="2" random="true"></thinktime>
+      
       <request subst="true">
-        <http url="%%_created_food_url%%" version="1.1" method="GET"></http>
+        <http url="%%_created_food_url%%" version="1.1" method="DELETE"></http>
       </request>
 
       <thinktime value="2" random="true"></thinktime>
