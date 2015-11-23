@@ -7,7 +7,7 @@
   </clients>
 
   <servers>
-    <server host="ec2-52-11-66-212.us-west-2.compute.amazonaws.com" port="80" type="tcp"/>
+    <server host="ec2-52-25-207-149.us-west-2.compute.amazonaws.com" port="80" type="tcp"/>
   </servers>
 
   <load>
@@ -73,7 +73,7 @@
       <setdynvars sourcetype="file" fileid="restaurant_names" delimiter=";" order="random">
         <var name="random_keyword" />
       </setdynvars>
-        <request>
+        <request subst="true">
             <http url="/search?search=%%_random_keyword%%" version="1.1" method="GET"></http>
         </request>
         
@@ -91,14 +91,14 @@
             <var name="rndres" />
         </setdynvars>
 
-      <request>
+      <request subst="true">
         <http url="/restaurants/%%_rndres%%" version="1.1" method="GET"></http>
       </request>
 
       <thinktime value="3" random="true"></thinktime>
       
       <!-- add comments -->
-      <request>
+      <request subst="true">
           <http url="/restaurants/%%_rndres%%/comments/new" version="1.1" method="GET"></http>
       </request>
         
@@ -122,13 +122,13 @@
         <setdynvars sourcetype="random_number" start="1" end="500">
             <var name="rndfood" />
         </setdynvars>
-        <request>
+        <request subst="true">
             <http url="/restaurants/%%_rndres%%/foods/%%_rndfood%%" version="1.1" method="GET"></http>
         </request>
         
         <thinktime value="2" random="true"></thinktime>
         
-        <request>
+        <request subst="true">
             <http url="/restaurants/%%_rndres%%" version="1.1" method="GET"></http>
         </request>
         
@@ -136,14 +136,13 @@
         
         <!-- order food -->
         
-        <request>
+        <request subst="true">
           <http url="/orders/addtocart/%%_rndfood%%" version="1.1" method="GET"></http>
         </request>
         
         <thinktime value="2" random="true"></thinktime>
         
           <request subst="true">
-            <dyn_variable name="created_food_url" re="[Ll]ocation: (http://.*)\r"/>
             <dyn_variable name="created_order_id" re="[Ll]ocation: http://.*/orders/(.*)\r"/>
             <http url="/orders"
                   version="1.1"
@@ -155,19 +154,19 @@
           <thinktime value="2" random="true"></thinktime>
           
       <!-- view order -->
-        <request>
+        <!--<request>
             <http url="customers/order" version="1.1" method="GET"></http>
         </request>
         
-        <thinktime value="2" random="true"></thinktime>
+        <thinktime value="2" random="true"></thinktime> -->
       
       <!-- pay order -->
-      <if var="created_order_id" neq="">
-        <request>
-            <http url="orders/pay/%%_created_order_id%%" version="1.1" method="GET"></http>
-        </request>
-      <thinktime value="2" random="true"></thinktime>
-      </if>
+      <!--<if var="created_order_id" neq="">-->
+      <!--  <request subst="true">-->
+      <!--      <http url="orders/pay/%%_created_order_id%%" version="1.1" method="GET"></http>-->
+      <!--  </request>-->
+      <!--<thinktime value="2" random="true"></thinktime>-->
+      <!--</if>-->
       
       <!-- Uncomment the following to debug print your dynamic variables  --> 
       <setdynvars sourcetype="eval" code="fun( {Pid, DynVars} ) ->
