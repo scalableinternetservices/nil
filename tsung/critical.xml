@@ -264,24 +264,18 @@
         <var name="rndorder" />
       </setdynvars>
 
-      <request>
+       <request subst="true">
         <http url="/orders/confirmed/%%_rndorder%%" version="1.1" method="GET"></http>
       </request>
 
       <thinktime value="5" random="true"></thinktime>
 
-      <request>
+      <request subst="true">
         <http url="/orders/ready/%%_rndorder%%" version="1.1" method="GET"></http>
       </request>
 
+
       <thinktime value="2" random="true"></thinktime>
-      
-      <!-- Uncomment the following to debug print your dynamic variables  --> 
-      <setdynvars sourcetype="eval" code="fun( {Pid, DynVars} ) ->
-        io:format([126, $p, 126, $n, 126, $n], [DynVars]),
-        ok end.">
-        <var name="dump" />
-      </setdynvars>
       
         <!-- log out -->
         <request>
@@ -321,7 +315,7 @@
           <var name="rndorder" />
       </setdynvars>
 
-      <request>
+      <request subst="true">
           <http url="/orders/%%_rndorder%%/take" version="1.1" method="GET"></http>
       </request>
 
@@ -331,13 +325,6 @@
       <request>
           <http url="/shippers/orders" version="1.1" method="GET"></http>
       </request>
-      
-      <!-- Uncomment the following to debug print your dynamic variables  --> 
-      <setdynvars sourcetype="eval" code="fun( {Pid, DynVars} ) ->
-        io:format([126, $p, 126, $n, 126, $n], [DynVars]),
-        ok end.">
-        <var name="dump" />
-      </setdynvars>
 
       <!-- log out -->
       <request>
