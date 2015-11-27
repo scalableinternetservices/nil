@@ -6,11 +6,17 @@ class RestaurantsController < ApplicationController
   # GET /restaurants.json
   def index
     @restaurants = Restaurant.all
-    if current_user.role.downcase == 'customer'
-      @address = Customer.select(:address).find_by user_id: current_user.id
-    else
-      @address = Restaurant.select(:address).find_by user_id: current_user.id
-    end
+      if current_user.role.downcase == 'customer'
+        @user = Customer.find_by user_id: current_user.id
+      elsif current_user.role.downcase == 'restaurant'
+        @user = Restaurant.find_by user_id: current_user.id
+      else
+        @user = Shipper.find_by user_id: current_user.id
+      end
+      @address = @user.address
+      
+      #client_side caching
+      fresh_when([@restaurants, @user.address])
   end
 
   # GET /restaurants/1
@@ -19,6 +25,8 @@ class RestaurantsController < ApplicationController
     @restaurant = Restaurant.find(params[:id])
     @foods = @restaurant.foods
     @comments = @restaurant.comments
+    #client_side caching
+    fresh_when([@restaurants, @restaurant.foods, @restaurant.comments])
   end
 
   # GET /restaurants/new

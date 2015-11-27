@@ -64,6 +64,8 @@ class ShippersController < ApplicationController
 
   def showOrders
     @orders = Order.includes(:shipper).where(shippers: {user_id: current_user.id}).includes(:restaurant)
+    #client-side caching
+    fresh_when([@orders])
   end
 
   private

@@ -8,15 +8,19 @@ class FoodsController < ApplicationController
     else
       @foods = @restaurant.foods
     end
+    #client-side caching
+    fresh_when([@restaurant, @restaurant.foods])
   end
 
   def index_restaurants
     @restaurant = Restaurant.find_by user_id: current_user.id
     @foods = @restaurant.foods
+    #client-side caching
+    fresh_when([@restaurant, @restaurant.foods])
   end
   def new
-    @food = Food.new
     @restaurant = Restaurant.find_by user_id: current_user.id
+    @food = Food.new if stale? @restaurant #client_side caching
   end
   
   def create
@@ -34,6 +38,7 @@ class FoodsController < ApplicationController
   def show
     @food = Food.find(params[:id])
     @restaurant = Restaurant.find(params[:restaurant_id])
+    fresh_when([@food, @restaurant])
   end
 
   def edit
