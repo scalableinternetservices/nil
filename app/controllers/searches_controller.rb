@@ -3,8 +3,11 @@ class SearchesController < ApplicationController
 
     #search action
   def search
-    @restaurants = Restaurant.search(params[:search])
-    @foods = Food.search(params[:search])
+      @restaurants = Rails.cache.fetch("search-restaurants-#{params[:search]}") do
+          Restaurant.search(params[:search])
+      end
+      
+      @foods = Food.search(params[:search])
   end
 
   private

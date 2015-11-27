@@ -2,10 +2,12 @@ class Food < ActiveRecord::Base
     belongs_to :restaurant
     
     def self.search(search)
+      Rails.cache.fetch("search-food-#{search}") do
         if (search)
-          where("name LIKE ?","%#{search}%")
+          Food.where("name LIKE ?","%#{search}%").all
         else
-          find(:all)
+          Food.find(:all).all
         end
+      end
     end
 end

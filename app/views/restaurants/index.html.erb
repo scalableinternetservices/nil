@@ -3,9 +3,11 @@
     <div class="panel-heading">
         <b>Restaurants</b>
     </div>
+    <% cache(cache_key_for_restaurants_table) do %>
     <div class="panel-body">
         <div class="row">
             <% @restaurants.each do |restaurant| %>
+            <% cache(cache_key_for_restaurant(restaurant)) do %>
                 <% @comments = restaurant.comments %>
                 <% avg_rating = 0%>
                 <% count = 0%>
@@ -28,9 +30,11 @@
                 </div>
             </div>
             <% end %>
+            <% end %>
             <!-- /.col-lg-4 -->
         </div>
     </div>
     <!-- /.panel-body -->
+    <% end %>
 </div>
 

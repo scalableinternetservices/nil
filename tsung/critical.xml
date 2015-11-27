@@ -7,7 +7,7 @@
   </clients>
 
   <servers>
-    <server host="ec2-52-25-207-149.us-west-2.compute.amazonaws.com" port="80" type="tcp"/>
+    <server host="ec2-52-33-13-6.us-west-2.compute.amazonaws.com" port="80" type="tcp"/>
   </servers>
 
   <load>
@@ -26,13 +26,13 @@
    <arrivalphase phase="5" duration="30" unit="second">
      <users arrivalrate="16" unit="second"></users>
    </arrivalphase>
-   <arrivalphase phase="6" duration="30" unit="second">
+   <!-- <arrivalphase phase="6" duration="30" unit="second">
      <users arrivalrate="32" unit="second"></users>
    </arrivalphase>
    <arrivalphase phase="7" duration="30" unit="second">
      <users arrivalrate="64" unit="second"></users>
    </arrivalphase>
-   <!--<arrivalphase phase="8" duration="30" unit="second">
+   <arrivalphase phase="8" duration="30" unit="second">
      <users arrivalrate="128" unit="second"></users>
    </arrivalphase>
    <arrivalphase phase="9" duration="30" unit="second">
@@ -265,12 +265,13 @@
       
       <thinktime value="2" random="true"></thinktime>
       
+      <if var="created_food_url" neq="">
       <request subst="true">
         <http url="%%_created_food_url%%" version="1.1" method="DELETE"></http>
       </request>
 
       <thinktime value="2" random="true"></thinktime>
-
+      </if>
         <!-- view orders -->
       <request>
         <http url="/restaurants/order" version="1.1" method="GET"></http>

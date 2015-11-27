@@ -18,6 +18,7 @@
                 </thead>
                 <tbody>
                     <% @orders.each do |order| %>
+                    <% cache(cache_key_for_order(order)) do %>
                     <tr class="odd gradeX">
                         <td><%= order.id %></td>
                         <td><%= order.user_name %></td>
@@ -44,6 +45,7 @@
                             <a class="btn btn-info" href="/restaurants/order/<%= order.id %>">View</a>
                         </td>
                     </tr>
+                    <% end %>
                     <% end %>
                 </tbody>
             </table>
