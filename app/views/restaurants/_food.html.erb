@@ -4,9 +4,11 @@
         <b> <%= @restaurant.name %> 's Menu</b>
     </div>
     <% if current_user.role == "customer" %>
+    <% cache(cache_key_for_foods_table_customer(@restaurant)) do %>
     <div class="panel-body">
         <div class="row">
             <% @foods.each do |food| %>
+            <% cache(cache_key_for_food_row_customer(food)) do %>
             <div class="col-lg-4">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -24,10 +26,13 @@
                 </div>
             </div>
             <% end %>
+            <% end %>
             <!-- /.col-lg-4 -->
         </div>
     </div>
+    <% end %>
     <% elsif current_user.role == "restaurant" %>
+    <% cache(cache_key_for_foods_table_restaurant(@restaurant)) do %>
     <!-- /.panel-heading -->
     <div class="panel-body">
         <div class="dataTable_wrapper">
@@ -45,6 +50,7 @@
                 </thead>
                 <tbody>
                     <% @foods.each do |food| %>
+                    <% cache(cache_key_for_food_row_restaurant(food)) do %>
                     <tr class="odd gradeX">
                         <td><%= link_to food.name, restaurant_food_path(@restaurant, food) %></td>
                         <td class="center"><%= food.price %></td>
@@ -58,6 +64,7 @@
                         </td>
                     </tr>
                     <% end %>
+                    <% end %>
                 </tbody>
             </table>
         </div>
@@ -66,6 +73,7 @@
             <%= link_to 'New Food', new_restaurant_food_path(@restaurant), class: "btn btn-lg btn-success" %>
         </td>
     </div>
+    <% end %>
     <% end %>
     <!-- /.panel-body -->
 </div>

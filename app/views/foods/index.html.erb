@@ -1,14 +1,15 @@
+<% cache(cache_key_for_foods_table(@restaurant)) do %>
 <br/>
 <div class="panel panel-default">
     <div class="panel-heading">
         <b> <%= @restaurant.name %>'s Menu</b>
     </div>
     <%# if current_user.role == "customer" %>
-    <% cache(cache_key_for_foods_table(@restaurant)) do %>
+    
     <div class="panel-body">
         <div class="row">
             <% @foods.each do |food| %>
-            <% cache(cache_key_for_food(food)) do %>
+            <% cache(cache_key_for_food_row(food)) do %>
             <div class="col-lg-4">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -30,6 +31,6 @@
             <!-- /.col-lg-4 -->
         </div>
     </div>
-    <% end %>
     <!-- /.panel-body -->
 </div>
+<% end %>

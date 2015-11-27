@@ -1,13 +1,14 @@
+<% cache(cache_key_for_restaurants_table) do %>
 <br/>
 <div class="panel panel-default">
     <div class="panel-heading">
         <b>Restaurants</b>
     </div>
-    <% cache(cache_key_for_restaurants_table) do %>
+    
     <div class="panel-body">
         <div class="row">
             <% @restaurants.each do |restaurant| %>
-            <% cache(cache_key_for_restaurant(restaurant)) do %>
+            <% cache(cache_key_for_restaurant_row(restaurant)) do %>
                 <% @comments = restaurant.comments %>
                 <% avg_rating = 0%>
                 <% count = 0%>
@@ -35,6 +36,6 @@
         </div>
     </div>
     <!-- /.panel-body -->
-    <% end %>
 </div>
+<% end %>
 

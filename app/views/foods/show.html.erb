@@ -6,10 +6,11 @@
         <div class="panel-heading">
           <h3 class="panel-title">Food Details</h3>
         </div>
-        <% cache(cache_key_for_food_detail(@food)) do %>
+        
         <div class="panel-body">
           <form role="form" method="get">
             <fieldset>
+              <% cache(cache_key_for_food_detail(@food)) do %>
               <div class="form-group">
                   <%= image_tag(@food.image, class: 'food_detail_image', size: "240x320") %><!-- style invalid -->
               </div>
@@ -33,6 +34,7 @@
                 <label>Discription:</label>
                 <%= @food.description %>
               </div>
+              <% end %>
               <% if current_user.role == "restaurant" && @restaurant == @food.restaurant%>
               <%= link_to 'Edit', edit_restaurant_food_path(), class:"btn btn-success" %>
               <%= link_to 'Back', restaurants_menu_path(), class: "btn btn-info" %>
@@ -42,7 +44,6 @@
             </fieldset>
           </form>
         </div>
-        <% end %>
       </div>
     </div>
   </div>

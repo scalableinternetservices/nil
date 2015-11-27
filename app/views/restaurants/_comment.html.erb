@@ -1,32 +1,10 @@
-<p id="notice"><%= notice %></p>
-
 <h1>Comments</h1>
-
-<!--<table class="table table-striped">-->
-<!--  <thead>-->
-<!--    <tr>-->
-<!--      <th>Message</th>-->
-<!--      <th>Restaurant</th>-->
-<!--      <th>Customer</th>-->
-<!--      <th colspan="3"></th>-->
-<!--    </tr>-->
-<!--  </thead>-->
-
-<!--  <tbody>-->
-<!--    <% @comments.each do |comment| %>-->
-<!--      <tr>-->
-<!--        <td><%= comment.message %></td>-->
-<!--        <td><%= comment.restaurant_id %></td>-->
-<!--        <td><%= comment.customer_id %></td>-->
-<!--        <td><%= link_to 'Show', '#' %></td>-->
-<!--        <td><%= link_to 'Edit', edit_restaurant_comment_path(@restaurant, comment) %></td>-->
-<!--        <td><%= link_to 'Destroy', '#', method: :delete, data: { confirm: 'Are you sure?' } %></td>-->
-<!--      </tr>-->
-<!--    <% end %>-->
-<!--  </tbody>-->
-<!--</table>-->
-
+<% if current_user.role == "customer" %>
+<%= link_to 'New Comment', new_restaurant_comment_path(@restaurant), class: "btn btn-lg btn-success" %>
+<% end %>
+  <% cache(cache_key_for_comments_table(@restaurant)) do %>
     <% @comments.each do |comment| %>
+    <% cache(cache_key_for_comment_row(comment)) do %>
       <div class="media well">
           <div class="media-body">
               <h4>
@@ -35,11 +13,7 @@
               <%= comment.message %> 
           </div>
       </div>
-    
     <% end %>
-
-
+    <% end %>
 <br>
-<% if current_user.role == "customer" %>
-<%= link_to 'New Comment', new_restaurant_comment_path(@restaurant), class: "btn btn-lg btn-success" %>
-<% end %>
+  <% end %>
