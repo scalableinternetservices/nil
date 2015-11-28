@@ -7,7 +7,7 @@
   </clients>
 
   <servers>
-    <server host="ec2-52-33-13-6.us-west-2.compute.amazonaws.com" port="80" type="tcp"/>
+    <server host="ec2-52-34-117-146.us-west-2.compute.amazonaws.com" port="80" type="tcp"/>
   </servers>
 
   <load>
@@ -69,7 +69,7 @@
       </request>
     </session>
     
-    <session name="customer" weight="40" type="ts_http">
+    <session name="customer" weight="55" type="ts_http">
         <setdynvars sourcetype="random_number" start="1" end="200">
             <var name="rndcus" />
         </setdynvars>
@@ -104,6 +104,14 @@
         <request>
             <http url="/restaurants/" version="1.1" method="GET"></http>
         </request>
+        <thinktime value="2" random="true"></thinktime>
+        <request>
+            <http url="/restaurants/" version="1.1" method="GET"></http>
+        </request>
+        <thinktime value="2" random="true"></thinktime>
+        <request>
+            <http url="/restaurants/" version="1.1" method="GET"></http>
+        </request>
 
         <thinktime value="2" random="true"></thinktime>
         
@@ -118,6 +126,9 @@
 
       <thinktime value="3" random="true"></thinktime>
       
+      <request subst="true">
+        <http url="/restaurants/%%_rndres%%" version="1.1" method="GET"></http>
+      </request>
       <!-- add comments -->
       <request subst="true">
           <http url="/restaurants/%%_rndres%%/comments/new" version="1.1" method="GET"></http>
@@ -190,11 +201,11 @@
       <!--</if>-->
       
       <!-- Uncomment the following to debug print your dynamic variables  --> 
-      <setdynvars sourcetype="eval" code="fun( {Pid, DynVars} ) ->
+      <!--<setdynvars sourcetype="eval" code="fun( {Pid, DynVars} ) ->
         io:format([126, $p, 126, $n, 126, $n], [DynVars]),
         ok end.">
         <var name="dump" />
-      </setdynvars>
+      </setdynvars>-->
       
       <!-- log out -->
         <request>

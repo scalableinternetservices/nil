@@ -37,7 +37,7 @@
             </thead>
             <tbody>
             <% @orders.each do |order| %>
-            <% cache(cache_key_for_order_row_shipper(order) do %>
+            <% cache(cache_key_for_order_row_shipper(order)) do %>
                 <tr class="odd gradeX">
                   <td><%= order.id %></td>
                   <td><%= order.restaurant.name %></td>
