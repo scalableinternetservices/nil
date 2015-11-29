@@ -17,8 +17,8 @@ class RestaurantsController < ApplicationController
   # GET /restaurants/1.json
   def show
     @restaurant = Restaurant.find(params[:id])
-    @foods = @restaurant.foods
-    @comments = @restaurant.comments
+    @foods = @restaurant.foods.paginate(:page => params[:food_page], :per_page => 9)
+    @comments = @restaurant.comments.paginate(:page => params[:comment_page], :per_page => 3)
   end
 
   # GET /restaurants/new
