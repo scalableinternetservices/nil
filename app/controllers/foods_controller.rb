@@ -12,7 +12,7 @@ class FoodsController < ApplicationController
 
   def index_restaurants
     @restaurant = Restaurant.find_by user_id: current_user.id
-    @foods = @restaurant.foods
+    @foods = @restaurant.foods.paginate(:page => params[:page], :per_page => 9)
   end
   def new
     @food = Food.new
