@@ -81,11 +81,11 @@ class OrdersController < ApplicationController
 
   # GET /orders/new
   def new
-    if session[:cart] == nil or session[:cart] == ""
-      session[:cart] = ActiveSupport::JSON.encode({})
+    if cookies[:cart] == nil or cookies[:cart] == ""
+      cookies[:cart] = ActiveSupport::JSON.encode({})
     end
     
-    @cart = ActiveSupport::JSON.decode(session[:cart])
+    @cart = ActiveSupport::JSON.decode(cookies[:cart])
     @restaurant = nil
 
     @cart.each do |item|
@@ -108,15 +108,15 @@ class OrdersController < ApplicationController
     @customer = Customer.find_by(user_id: current_user.id)
     @food = Food.find(params[:id])
 
-    if session[:cart] == nil or session[:cart] == ""
-      session[:cart] = ActiveSupport::JSON.encode(Array.new())
+    if cookies[:cart] == nil or cookies[:cart] == ""
+      cookies[:cart] = ActiveSupport::JSON.encode(Array.new())
     end
 
     if (@food.num_left < 1)
       render html: "<script>\nalert('This item is sold out.');\nhistory.back();\n</script>".html_safe and return;
     end
 
-    cart = ActiveSupport::JSON.decode(session[:cart])
+    cart = ActiveSupport::JSON.decode(cookies[:cart])
     
     isFound = false
     cart.each do |item|
@@ -135,13 +135,13 @@ class OrdersController < ApplicationController
       cart.push({food_id: params[:id], count: 1})
     end
 
-    session[:cart] = ActiveSupport::JSON.encode(cart)
+    cookies[:cart] = ActiveSupport::JSON.encode(cart)
 
     redirect_to '/orders/new'
   end
 
   def clearcart
-    session[:cart] = ActiveSupport::JSON.encode(Array.new())
+    cookies[:cart] = ActiveSupport::JSON.encode(Array.new())
 
     redirect_to '/restaurants'
   end
@@ -189,13 +189,13 @@ class OrdersController < ApplicationController
   def create
     @order = Order.new(order_params)
 
-    if session[:cart] == nil and session[:cart] == ""
+    if cookies[:cart] == nil and cookies[:cart] == ""
       render html: "Empty Purchase Cart".html_safe and return
     end
 
     @order.price = 0
     @food = nil
-    cart = ActiveSupport::JSON.decode(session[:cart])
+    cart = ActiveSupport::JSON.decode(cookies[:cart])
     count = 0
     food_json = Array.new()
 
@@ -241,7 +241,7 @@ class OrdersController < ApplicationController
 
     respond_to do |format|
       if @order.save
-        session[:cart] = ""
+        cookies[:cart] = ""
 
         format.html { redirect_to @order, notice: 'Order was successfully created.' }
         format.json { render :show, status: :created, location: @order }
