@@ -6,6 +6,19 @@ class RestaurantsController < ApplicationController
   # GET /restaurants.json
   def index
     @restaurants = Restaurant.all
+    @restaurants.each do |item|
+      if item.avg_rating < 0
+        rating = Comment.select("AVG(rating) AS rating")
+                              .where(:restaurant_id => item.id)
+                              .first.rating
+        if rating == nil
+          rating = 0.0
+        end
+
+        item.update(avg_rating: rating)
+      end
+    end
+
     if current_user.role.downcase == 'customer'
       @address = Customer.select(:address).find_by user_id: current_user.id
     else
@@ -17,8 +30,8 @@ class RestaurantsController < ApplicationController
   # GET /restaurants/1.json
   def show
     @restaurant = Restaurant.find(params[:id])
-    @foods = @restaurant.foods
-    @comments = @restaurant.comments
+    @foods = Food.where(:restaurant_id => @restaurant.id) #@restaurant.foods
+    @comments = Comment.where(:restaurant_id => @restaurant.id) #@restaurant.comments
   end
 
   # GET /restaurants/new

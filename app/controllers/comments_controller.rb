@@ -34,10 +34,15 @@ class CommentsController < ApplicationController
   def create
     @restaurant = Restaurant.find(params[:restaurant_id])
     @customer = Customer.find_by user_id: current_user.id
-    @comment = @restaurant.comments.build(comment_params)
+    @comment = Comment.where(:restaurant_id => @restaurant.id).build(comment_params)
     @comment.customer_id = @customer.id
     #respond_to do |format|
       if @comment.save
+        rating = Comment.select("AVG(rating) AS rating")
+                              .where(:restaurant_id => @restaurant.id)
+                              .first.rating
+
+        @restaurant.update(avg_rating: rating)
         # format.html { redirect_to @comment, notice: 'Comment was successfully created.' }
         # format.json { render :show, status: :created, location: @comment }
         redirect_to restaurant_path(@restaurant)
@@ -54,6 +59,11 @@ class CommentsController < ApplicationController
     @customer = Customer.find_by user_id: current_user.id
     #respond_to do |format|
       if @comment.update(comment_params)
+        rating = Comment.select("AVG(rating) AS rating")
+                              .where(:restaurant_id => @restaurant.id)
+                              .first.rating
+
+        @restaurant.update(avg_rating: rating)
         # format.html { redirect_to @comment, notice: 'Comment was successfully updated.' }
         # format.json { render :show, status: :ok, location: @comment }
         redirect_to restaurant_comments_path(@restaurant)

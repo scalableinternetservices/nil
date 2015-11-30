@@ -6,13 +6,6 @@
     <div class="panel-body">
         <div class="row">
             <% @restaurants.each do |restaurant| %>
-                <% @comments = restaurant.comments %>
-                <% avg_rating = 0%>
-                <% count = 0%>
-                <% @comments.each do |comment|%>
-                    <% avg_rating = avg_rating+comment.rating%>
-                    <% count = count+1%>
-                <%end%>
             <div class="col-lg-4">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -20,7 +13,7 @@
                         <!--<span class = "pull-right">$<%#= restaurant.distance_to(@address) %></span>-->
                     </div>
                     <div class="panel-body">
-                        <b>Avg Rating:</b> <%= number_with_precision(avg_rating*1.0/count, :precision => 2) %> <br/>
+                        <b>Avg Rating:</b> <%= number_with_precision(restaurant.avg_rating, :precision => 2) %> <br/>
                         <b>Address:</b> <%= restaurant.address %> <br/>
                         <b>Zip Code:</b> <%= restaurant.zip %><br/>
                         <b>Phone:</b> <%= restaurant.phone %>
