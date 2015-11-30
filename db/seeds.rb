@@ -170,7 +170,7 @@ end
 total_num_of_restaurants.times do |res|
   total_num_of_pending_orders_per_restaurant.times do |order|
     restaurant = Restaurant.find(res + 1)
-    foods = restaurant.foods
+    foods = Food.where(:restaurant_id => restaurant.id) #restaurant.foods
     food_id = foods.pluck(:id).sample
     Order.create(
       price: rand(100) + 1,
