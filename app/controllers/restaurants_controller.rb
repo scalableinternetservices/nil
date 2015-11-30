@@ -5,7 +5,7 @@ class RestaurantsController < ApplicationController
   # GET /restaurants
   # GET /restaurants.json
   def index
-    @restaurants = Restaurant.all
+    @restaurants = Restaurant.all.includes(:comments)
     if current_user.role.downcase == 'customer'
       @address = Customer.select(:address).find_by user_id: current_user.id
     else
@@ -18,7 +18,7 @@ class RestaurantsController < ApplicationController
   def show
     @restaurant = Restaurant.find(params[:id])
     @foods = @restaurant.foods
-    @comments = @restaurant.comments
+    @comments = @restaurant.comments.includes(:customer)
   end
 
   # GET /restaurants/new
