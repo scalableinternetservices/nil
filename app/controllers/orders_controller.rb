@@ -18,39 +18,46 @@ class OrdersController < ApplicationController
 
   def index_customers
     if params[:filter] == "ongoing"
-      @orders = Order.select("orders.*, restaurants.name AS rest_name")
-                          .where(:user_id => current_user.id,
+      @orders = Order.where(:user_id => current_user.id,
                             :arrived_at => nil
-                          ).joins("LEFT JOIN restaurants ON restaurants.id = orders.restaurant_id")
+                          )
+      @orders.each do |item|
+        item.rest_name = Restaurant.find(item.restaurant_id).name
+      end
     else
-      @orders = Order.select("orders.*, restaurants.name AS rest_name")
-                          .where(:user_id => current_user.id
-                          ).joins("LEFT JOIN restaurants ON restaurants.id = orders.restaurant_id")
+      @orders = Order.where(:user_id => current_user.id
+                          )
+      @orders.each do |item|
+        item.rest_name = Restaurant.find(item.restaurant_id).name
+      end
     end
   end
 
   def index_restaurants
     if params[:filter] == "pending-confirmed"
-      @orders = Order.select("orders.*, customers.name AS user_name")
-                          .where(:restaurant_id => @current_restaurant.id,
+      @orders = Order.where(:restaurant_id => @current_restaurant.id,
                             :confirmed_at => nil,
                             :paid => true
                           )
-                          .joins("LEFT JOIN customers ON customers.user_id = orders.user_id")
+      @orders.each do |item|
+        item.user_name = Customer.find_by(user_id: item.user_id).name
+      end
     elsif params[:filter] == "preparing"
-      @orders = Order.select("orders.*, customers.name AS user_name")
-                          .where(:restaurant_id => @current_restaurant.id,
+      @orders = Order.where(:restaurant_id => @current_restaurant.id,
                             :ready => false,
                             :paid => true
                           )
                           .where.not(:confirmed_at => nil)
-                          .joins("LEFT JOIN customers ON customers.user_id = orders.user_id")
+      @orders.each do |item|
+        item.user_name = Customer.find_by(user_id: item.user_id).name
+      end
     else
-      @orders = Order.select("orders.*, customers.name AS user_name")
-                          .where(:restaurant_id => @current_restaurant.id,
+      @orders = Order.where(:restaurant_id => @current_restaurant.id,
                             :paid => true
                           )
-                          .joins("LEFT JOIN customers ON customers.user_id = orders.user_id")
+      @orders.each do |item|
+        item.user_name = Customer.find_by(user_id: item.user_id).name
+      end
     end
   end
 
