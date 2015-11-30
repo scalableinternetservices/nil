@@ -63,7 +63,7 @@ class ShippersController < ApplicationController
   end
 
   def showOrders
-    @orders = Order.includes(:shipper).where(shippers: {user_id: current_user.id}).includes(:restaurant)
+    @orders = Order.includes(:shipper).where(shippers: {user_id: current_user.id}).includes(:restaurant).paginate(:page => params[:page], :per_page => 9)
   end
 
   private
