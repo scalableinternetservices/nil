@@ -9,9 +9,9 @@ total_num_of_customers = 200
 total_num_of_restaurants = 30
 total_num_of_shippers = 30
 total_num_of_foods = 500
-total_num_of_comments = 1000000
+total_num_of_comments = 50000
 total_num_of_pending_orders_per_restaurant = 5
-total_num_of_confirmed_orders = 500000
+total_num_of_confirmed_orders = 5000
 #22
 addresses = [
     "2838 Crenshaw Blvd",
