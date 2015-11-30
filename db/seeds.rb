@@ -122,7 +122,8 @@ total_num_of_restaurants.times do |res|
       address: addresses[rand(22)],
       zip: 90024,
       phone: 1234567890,
-      user_id: user.id
+      user_id: user.id,
+      avg_rating: -1
     )
 end
 
