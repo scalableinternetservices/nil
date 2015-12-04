@@ -1,26 +1,32 @@
-<p id="notice"><%= notice %></p>
+<br/>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <b> <%= @restaurant.name %>'s Comments</b>
+    </div>
+    <div class="panel-body">
+      
+      <div class="row">
+          <% @comments.each do |comment| %>
+            <div class="media well">
+                <div class="media-body">
+                    <h4>
+                        <%= comment.customer.name %> <small>rated <%= comment.rating %> in <%= comment.created_at%></small>
+                    </h4>
+                    <%= comment.message %>
+                </div>
+            </div>
 
-<h1>Comments</h1>
-
-<div class="row">
-    <% @comments.each do |comment| %>
-      <div class="media well">
-          <div class="media-body">
-              <h4>
-                  <%= comment.customer.name %> <small>rated <%= comment.rating %> in <%= comment.created_at%></small>
-              </h4>
-              <%= comment.message %>
-          </div>
+          <% end %>
       </div>
 
-    <% end %>
-</div>
+      <div class="row text-center">
+          <%= will_paginate @comments, renderer: BootstrapPagination::Rails, :param_name => 'comment_page' %>
+      </div>
 
-<div class="row text-center">
-    <%= will_paginate @comments, renderer: BootstrapPagination::Rails, :param_name => 'comment_page' %>
-</div>
+      <br>
+      <% if current_user.role == "customer" %>
+      <%= link_to 'New Comment', new_restaurant_comment_path(@restaurant), class: "btn btn-lg btn-success" %>
+      <% end %>
 
-<br>
-<% if current_user.role == "customer" %>
-<%= link_to 'New Comment', new_restaurant_comment_path(@restaurant), class: "btn btn-lg btn-success" %>
-<% end %>
+    </div>
+</div>
