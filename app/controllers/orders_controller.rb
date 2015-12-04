@@ -12,7 +12,7 @@ class OrdersController < ApplicationController
     if (current_user.role.downcase == "customer")
       redirect_to "/customers/order"
     elsif current_user.role == 'shipper'
-        @orders = Order.includes(:restaurant).where(assigned: false).where.not(confirmed_at: nil)
+        @orders = Order.includes(:restaurant).where(assigned: false).where.not(confirmed_at: nil).paginate(:page => params[:page], :per_page => 9)
     end
   end
 

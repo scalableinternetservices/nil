@@ -32,6 +32,10 @@ gem 'geocoder'
 # Use Unicorn as the app server
 # gem 'unicorn'
 
+# Pagination
+gem 'will_paginate', '~> 3.0.6'
+gem 'will_paginate-bootstrap'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

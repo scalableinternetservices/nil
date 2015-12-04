@@ -28,7 +28,9 @@
                 </div>
             </div>
             <% end %>
-            <!-- /.col-lg-4 -->
+        </div>
+        <div class="row text-center">
+          <%= will_paginate @restaurants, renderer: BootstrapPagination::Rails %>
         </div>
     </div>
     <!-- /.panel-body -->

@@ -26,6 +26,9 @@
             <% end %>
             <!-- /.col-lg-4 -->
         </div>
+        <div class="row text-center">
+          <%= will_paginate @foods, renderer: BootstrapPagination::Rails, :param_name => 'food_page' %>
+        </div>
     </div>
     <% elsif current_user.role == "restaurant" %>
     <!-- /.panel-heading -->
